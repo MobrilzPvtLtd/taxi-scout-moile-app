@@ -21,7 +21,8 @@ class GetStarted extends StatefulWidget {
 }
 
 String name = ''; //name of user
-String email = ''; // email of user
+String email = '';
+String password = "";// email of user
 dynamic proImageFile1;
 
 class _GetStartedState extends State<GetStarted> {
@@ -314,7 +315,7 @@ class _GetStartedState extends State<GetStarted> {
                                               _error = '';
                                             });
                                             var register = await registerUser();
-                                            if (register == 'true') {
+                                            if (register == null) {
                                               //referral page
                                               navigate();
                                             } else {

@@ -121,8 +121,8 @@ class _EditProfileState extends State<EditProfile> {
                               width: media.width * 1,
                               alignment: Alignment.center,
                               child: Text(
-                               // 'Edit Profile',
-                            languages[choosenLanguage]['text_editprofile'],
+                                // 'Edit Profile',
+                                languages[choosenLanguage]['text_editprofile'],
                                 style: GoogleFonts.roboto(
                                     fontSize: media.width * twenty,
                                     fontWeight: FontWeight.w600,
@@ -147,9 +147,9 @@ class _EditProfileState extends State<EditProfile> {
                               image: (imageFile == null)
                                   ? DecorationImage(
                                       image: NetworkImage(
-                                         userDetails['profile_picture'] ==null?
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu3_qIHtXBZ7vZeMQhyD8qLC1VRB9ImHadL09KET_iSQEX6ags4ICknfmqEKz8Nf6IOsA&usqp=CAU'
-                                     :   userDetails['profile_picture'],
+                                        userDetails['profile_picture'] == null
+                                            ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu3_qIHtXBZ7vZeMQhyD8qLC1VRB9ImHadL09KET_iSQEX6ags4ICknfmqEKz8Nf6IOsA&usqp=CAU'
+                                            : userDetails['profile_picture'],
                                       ),
                                       fit: BoxFit.cover)
                                   : DecorationImage(
@@ -166,7 +166,7 @@ class _EditProfileState extends State<EditProfile> {
                             });
                           },
                           child: Text(
-                      languages[choosenLanguage]['text_editimage'],
+                              languages[choosenLanguage]['text_editimage'],
                               style: GoogleFonts.roboto(
                                   fontSize: media.width * sixteen,
                                   color: buttonColor)),
@@ -177,17 +177,14 @@ class _EditProfileState extends State<EditProfile> {
                         SizedBox(
                           width: media.width * 0.8,
                           child: TextField(
-                            textDirection:
-                             (choosenLanguage == 'iw' ||
+                            textDirection: (choosenLanguage == 'iw' ||
                                     choosenLanguage == 'ur' ||
                                     choosenLanguage == 'ar')
                                 ? TextDirection.rtl
-                                : 
-                                TextDirection.ltr,
+                                : TextDirection.ltr,
                             controller: name,
                             decoration: InputDecoration(
-                              labelText: 
-                               languages[choosenLanguage]
+                                labelText: languages[choosenLanguage]
                                     ['text_name'],
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
@@ -202,16 +199,13 @@ class _EditProfileState extends State<EditProfile> {
                           width: media.width * 0.8,
                           child: TextField(
                             controller: email,
-                            textDirection:
-                             (choosenLanguage == 'iw' ||
+                            textDirection: (choosenLanguage == 'iw' ||
                                     choosenLanguage == 'ur' ||
                                     choosenLanguage == 'ar')
                                 ? TextDirection.rtl
-                                : 
-                                TextDirection.ltr,
+                                : TextDirection.ltr,
                             decoration: InputDecoration(
-                                labelText:
-                                 languages[choosenLanguage]
+                                labelText: languages[choosenLanguage]
                                     ['text_email'],
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),

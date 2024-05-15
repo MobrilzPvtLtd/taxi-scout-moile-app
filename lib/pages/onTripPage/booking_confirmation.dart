@@ -1315,8 +1315,7 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                           lowWalletBalance == false)
                                       ? (_chooseGoodsType == true ||
                                               choosenTransportType == 0)
-                                          ?
-                                           Positioned(
+                                          ? Positioned(
                                               bottom: 0,
                                               child: AnimatedOpacity(
                                                 opacity:
@@ -2587,24 +2586,23 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                           : Container()
                                       : Positioned(
                                           bottom: 0,
-                                          child: 
-                                          Container(
+                                          child: Container(
                                             height: 100,
-                                          width: media.width * 1,
-                                      
-                                           
-
-                                            
+                                            width: media.width * 1,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(12.0),
-                                                topRight: Radius.circular(12.0)
-
-                                              ),
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(12.0),
+                                                    topRight:
+                                                        Radius.circular(12.0)),
                                                 color: Colors.white),
-                                                child: Center(child: Text('Data Not Found', style: TextStyle(fontSize: 17.0),)),
+                                            child: Center(
+                                                child: Text(
+                                              'Data Not Found',
+                                              style: TextStyle(fontSize: 17.0),
+                                            )),
                                           ),
-                                          ),
+                                        ),
 
                                   //Container(child: Text('data Second'),),
 

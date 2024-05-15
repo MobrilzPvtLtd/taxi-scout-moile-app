@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:tagyourtaxi_driver/functions/notifications.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/notification.dart';
 import 'package:tagyourtaxi_driver/pages/onTripPage/booking_confirmation.dart';
@@ -141,11 +140,11 @@ class _MapsState extends State<Maps>
 
 //navigate
   navigate() {
-    if (choosenTransportType == 0 
-    // && Smoking == true ||
-    //     pets == true ||
-    //     drinking == true ||
-    //     handicap == true
+    if (choosenTransportType == 0
+        // && Smoking == true ||
+        //     pets == true ||
+        //     drinking == true ||
+        //     handicap == true
         ) {
       Navigator.push(
           context,
@@ -1547,126 +1546,124 @@ class _MapsState extends State<Maps>
                                                                     ),
                                                                   )
                                                                 : Container(),
-                                                            (_bottom == 0)
-                                                                ? Container(
-                                                                    height: media
-                                                                            .width *
-                                                                        0.12,
-                                                                    decoration: BoxDecoration(
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                buttonColor,
-                                                                            width:
-                                                                                1)),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        InkWell(
-                                                                          onTap:
-                                                                              () {
-                                                                            if (choosenTransportType !=
-                                                                                0) {
-                                                                              setState(() {
-                                                                                choosenTransportType = 0;
-                                                                                myMarkers.clear();
-                                                                              });
-                                                                            }
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            color: (choosenTransportType == 0)
-                                                                                ? buttonColor
-                                                                                : Colors.transparent,
-                                                                            width:
-                                                                                media.width * 0.45 - 1,
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                SizedBox(
-                                                                                  width: 5,
-                                                                                ),
-                                                                                Icon(
-                                                                                  Icons.folder,
-                                                                                  size: 35,
-                                                                                  color: (choosenTransportType == 0) ? page : textColor,
-                                                                                ),
-                                                                                Spacer(),
-                                                                                Text(
-                                                                                  languages[choosenLanguage]['text_delivery'],
-                                                                                  style: GoogleFonts.roboto(
-                                                                                    fontSize: media.width * fourteen,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                    color: (choosenTransportType == 0) ? page : textColor,
-                                                                                  ),
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  width: 15,
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        InkWell(
-                                                                          onTap:
-                                                                              () {
-                                                                            if (choosenTransportType !=
-                                                                                1) {
-                                                                              setState(() {
-                                                                                choosenTransportType = 1;
-                                                                                myMarkers.clear();
-                                                                              });
-                                                                            }
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            color: (choosenTransportType == 1)
-                                                                                ? buttonColor
-                                                                                : Colors.transparent,
-                                                                            width:
-                                                                                media.width * 0.45 - 1,
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                SizedBox(
-                                                                                  width: 5,
-                                                                                ),
-                                                                                Icon(
-                                                                                  Icons.car_rental,
-                                                                                  size: 35,
-                                                                                  color: (choosenTransportType == 1) ? page : textColor,
-                                                                                ),
-                                                                                Spacer(),
-                                                                                Text(
-                                                                                  languages[choosenLanguage]['text_taxi'],
-                                                                                  style: GoogleFonts.roboto(
-                                                                                    fontSize: media.width * fourteen,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                    color: (choosenTransportType == 1) ? page : textColor,
-                                                                                  ),
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  width: 10,
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  )
-                                                                : Container(),
+                                                            if (_bottom == 0)
+                                                              // ? Container(
+                                                              //     height: media
+                                                              //             .width *
+                                                              //         0.12,
+                                                              //     decoration: BoxDecoration(
+                                                              //         border: Border.all(
+                                                              //             color:
+                                                              //                 buttonColor,
+                                                              //             width:
+                                                              //                 1)),
+                                                              //     child: Row(
+                                                              //       children: [
+                                                              //         InkWell(
+                                                              //           onTap:
+                                                              //               () {
+                                                              //             if (choosenTransportType !=
+                                                              //                 0) {
+                                                              //               setState(() {
+                                                              //                 choosenTransportType = 0;
+                                                              //                 myMarkers.clear();
+                                                              //               });
+                                                              //             }
+                                                              //           },
+                                                              //           child:
+                                                              //               Container(
+                                                              //             color: (choosenTransportType == 0)
+                                                              //                 ? buttonColor
+                                                              //                 : Colors.transparent,
+                                                              //             width:
+                                                              //                 media.width * 0.45 - 1,
+                                                              //             alignment:
+                                                              //                 Alignment.center,
+                                                              //             child:
+                                                              //                 Row(
+                                                              //               mainAxisAlignment: MainAxisAlignment.center,
+                                                              //               children: [
+                                                              //                 SizedBox(
+                                                              //                   width: 5,
+                                                              //                 ),
+                                                              //                 Icon(
+                                                              //                   Icons.folder,
+                                                              //                   size: 35,
+                                                              //                   color: (choosenTransportType == 0) ? page : textColor,
+                                                              //                 ),
+                                                              //                 Spacer(),
+                                                              //                 // Text(
+                                                              //                 //   languages[choosenLanguage]['text_delivery'],
+                                                              //                 //   style: GoogleFonts.roboto(
+                                                              //                 //     fontSize: media.width * fourteen,
+                                                              //                 //     fontWeight: FontWeight.bold,
+                                                              //                 //     color: (choosenTransportType == 0) ? page : textColor,
+                                                              //                 //   ),
+                                                              //                 // ),
+                                                              //                 SizedBox(
+                                                              //                   width: 15,
+                                                              //                 ),
+                                                              //               ],
+                                                              //             ),
+                                                              //           ),
+                                                              //         ),
+                                                              //         InkWell(
+                                                              //           onTap:
+                                                              //               () {
+                                                              //             if (choosenTransportType !=
+                                                              //                 1) {
+                                                              //               setState(() {
+                                                              //                 choosenTransportType = 1;
+                                                              //                 myMarkers.clear();
+                                                              //               });
+                                                              //             }
+                                                              //           },
+                                                              //           child:
+                                                              //               Container(
+                                                              //             color: (choosenTransportType == 1)
+                                                              //                 ? buttonColor
+                                                              //                 : Colors.transparent,
+                                                              //             width:
+                                                              //                 media.width * 0.45 - 1,
+                                                              //             alignment:
+                                                              //                 Alignment.center,
+                                                              //             child:
+                                                              //                 Row(
+                                                              //               mainAxisAlignment: MainAxisAlignment.center,
+                                                              //               children: [
+                                                              //                 SizedBox(
+                                                              //                   width: 5,
+                                                              //                 ),
+                                                              //                 Icon(
+                                                              //                   Icons.car_rental,
+                                                              //                   size: 35,
+                                                              //                   color: (choosenTransportType == 1) ? page : textColor,
+                                                              //                 ),
+                                                              //                 Spacer(),
+                                                              //                 Text(
+                                                              //                   languages[choosenLanguage]['text_taxi'],
+                                                              //                   style: GoogleFonts.roboto(
+                                                              //                     fontSize: media.width * fourteen,
+                                                              //                     fontWeight: FontWeight.bold,
+                                                              //                     color: (choosenTransportType == 1) ? page : textColor,
+                                                              //                   ),
+                                                              //                 ),
+                                                              //                 SizedBox(
+                                                              //                   width: 10,
+                                                              //                 ),
+                                                              //               ],
+                                                              //             ),
+                                                              //           ),
+                                                              //         ),
+                                                              //       ],
+                                                              //     ),
+                                                              //   )
+                                                              Container(),
                                                             SizedBox(
                                                               height:
                                                                   media.width *
                                                                       0.03,
                                                             ),
-
-                                                            
                                                             InkWell(
                                                               onTap: () {
                                                                 if (addressList
@@ -1780,10 +1777,6 @@ class _MapsState extends State<Maps>
                                                                     ],
                                                                   )),
                                                             ),
-                                                           
-                                                           
-                                                           
-                                                           
                                                             Expanded(
                                                                 child:
                                                                     SingleChildScrollView(
@@ -1892,152 +1885,101 @@ class _MapsState extends State<Maps>
                                                                                   )
                                                                                 : Container(),
 
-                                                                                 Center(
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                scrollDirection:
-                                                                    Axis.vertical,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: EdgeInsets.only(
-                                                                          right:
-                                                                              10),
-                                                                      child:
-                                                                          Text(
-                                                                        "Smoking:",
-                                                                      ),
-                                                                    ),
-                                                                    Theme(
-                                                                      data: ThemeData(
-                                                                          unselectedWidgetColor:
-                                                                              Colors.grey),
-                                                                      child:
-                                                                          Checkbox(
-                                                                        value:
-                                                                            Smoking,
-                                                                        checkColor:
-                                                                            Color(0xfff44336),
-                                                                        activeColor:
-                                                                            Colors.grey,
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          setState(
-                                                                            () {
-                                                                              Smoking = value!;
-                                                                              etaRequest(Smoking, pets, drinking, handicap);
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                      ),
-                                                                    ),
-                                                                    Text(
-                                                                      "Pets:",
-                                                                    ),
-                                                                    Theme(
-                                                                      data: ThemeData(
-                                                                          unselectedWidgetColor:
-                                                                              Colors.grey),
-                                                                      child:
-                                                                          Checkbox(
-                                                                        value:
-                                                                            pets,
-                                                                        checkColor:
-                                                                            Color(0xfff44336),
-                                                                        activeColor:
-                                                                            Colors.grey,
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          setState(
-                                                                            () {
-                                                                              pets = value!;
-                                                                              etaRequest(Smoking, pets, drinking, handicap);
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                      ),
-                                                                    ),
-                                                                    Text(
-                                                                      "Drinking:",
-                                                                    ),
-                                                                    Theme(
-                                                                      data: ThemeData(
-                                                                          unselectedWidgetColor:
-                                                                              Colors.grey),
-                                                                      child:
-                                                                          Checkbox(
-                                                                        value:
-                                                                            drinking,
-                                                                        checkColor:
-                                                                            Color(0xfff44336),
-                                                                        activeColor:
-                                                                            Colors.grey,
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          setState(
-                                                                            () {
-                                                                              drinking = value!;
-                                                                              etaRequest(Smoking, pets, drinking, handicap);
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Center(
-                                                              child:  SingleChildScrollView(
-                                                                scrollDirection:
-                                                                    Axis.vertical,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: EdgeInsets.only(
-                                                                          right:
-                                                                              10),
-                                                                      child: Text(
-                                                                        "Handicaped:",
-                                                                      ),
-                                                                    ),
-                                                                    Theme(
-                                                                      data: ThemeData(
-                                                                          unselectedWidgetColor:
-                                                                              Colors.grey),
-                                                                      child:
-                                                                          Checkbox(
-                                                                        value:
-                                                                            handicap,
-                                                                        checkColor:
-                                                                            Color(
-                                                                                0xfff44336),
-                                                                        activeColor:
-                                                                            Colors
-                                                                                .grey,
-                                                                        onChanged:
-                                                                            (value) {
-                                                                          setState(
-                                                                            () {
-                                                                              handicap =
-                                                                                  value!;
-                                                                              etaRequest(
-                                                                                  Smoking,
-                                                                                  pets,
-                                                                                  drinking,
-                                                                                  handicap);
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                           
-                                                           
-                                                           
+                                                                            SingleChildScrollView(
+                                                                              scrollDirection: Axis.vertical,
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    "Smoking:",
+                                                                                  ),
+                                                                                  Theme(
+                                                                                    data: ThemeData(unselectedWidgetColor: Colors.grey),
+                                                                                    child: Checkbox(
+                                                                                      value: Smoking,
+                                                                                      checkColor: Colors.white,
+                                                                                      activeColor: Colors.green,
+                                                                                      onChanged: (value) {
+                                                                                        setState(
+                                                                                          () {
+                                                                                            Smoking = value!;
+                                                                                            etaRequest(Smoking, pets, drinking, handicap);
+                                                                                          },
+                                                                                        );
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                  Spacer(),
+                                                                                  Text(
+                                                                                    "Pets:",
+                                                                                  ),
+                                                                                  Theme(
+                                                                                    data: ThemeData(unselectedWidgetColor: Colors.grey),
+                                                                                    child: Checkbox(
+                                                                                      value: pets,
+                                                                                      checkColor: Colors.white,
+                                                                                      activeColor: Colors.green,
+                                                                                      onChanged: (value) {
+                                                                                        setState(
+                                                                                          () {
+                                                                                            pets = value!;
+                                                                                            etaRequest(Smoking, pets, drinking, handicap);
+                                                                                          },
+                                                                                        );
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            SingleChildScrollView(
+                                                                              scrollDirection: Axis.vertical,
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    "Drinking:",
+                                                                                  ),
+                                                                                  Theme(
+                                                                                    data: ThemeData(unselectedWidgetColor: Colors.grey),
+                                                                                    child: Checkbox(
+                                                                                      value: drinking,
+                                                                                      checkColor: Colors.white,
+                                                                                      activeColor: Colors.green,
+                                                                                      onChanged: (value) {
+                                                                                        setState(
+                                                                                          () {
+                                                                                            drinking = value!;
+                                                                                            etaRequest(Smoking, pets, drinking, handicap);
+                                                                                          },
+                                                                                        );
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                  Spacer(),
+                                                                                  Text(
+                                                                                    "Handicaped:",
+                                                                                  ),
+                                                                                  Theme(
+                                                                                    data: ThemeData(unselectedWidgetColor: Colors.grey),
+                                                                                    child: Checkbox(
+                                                                                      value: handicap,
+                                                                                      checkColor: Colors.white,
+                                                                                      activeColor: Colors.green,
+                                                                                      onChanged: (value) {
+                                                                                        setState(
+                                                                                          () {
+                                                                                            handicap = value!;
+                                                                                            etaRequest(Smoking, pets, drinking, handicap);
+                                                                                          },
+                                                                                        );
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+
                                                                             SizedBox(
                                                                               height: media.width * 0.05,
                                                                             ),
@@ -2089,9 +2031,9 @@ class _MapsState extends State<Maps>
                                                                                                           addAutoFill.clear();
                                                                                                           _bottom = 0;
                                                                                                         });
-                                                                                                        if (addressList.length == 2 && choosenTransportType == 0 
-                                                                                                      //  && Smoking == true || pets == true || drinking == true || handicap == true
-                                                                                                        ) {
+                                                                                                        if (addressList.length == 2 && choosenTransportType == 0
+                                                                                                            //  && Smoking == true || pets == true || drinking == true || handicap == true
+                                                                                                            ) {
                                                                                                           Navigator.push(
                                                                                                               context,
                                                                                                               MaterialPageRoute(

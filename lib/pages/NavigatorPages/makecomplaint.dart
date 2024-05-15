@@ -107,8 +107,7 @@ class _MakeComplaintState extends State<MakeComplaint> {
                       height: media.width * 0.05,
                     ),
                     (generalComplaintList.isNotEmpty)
-                        ? 
-                        Expanded(
+                        ? Expanded(
                             child: Column(children: [
                             InkWell(
                               onTap: () {
@@ -134,11 +133,8 @@ class _MakeComplaintState extends State<MakeComplaint> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                 
-                                      generalComplaintList[complaintType]
-                                        ['title']
-                                        ),
+                                    Text(generalComplaintList[complaintType]
+                                        ['title']),
                                     RotatedBox(
                                       quarterTurns:
                                           (_showOptions == true) ? 2 : 0,
@@ -184,10 +180,9 @@ class _MakeComplaintState extends State<MakeComplaint> {
                               ),
                             ),
                           ]))
-                       : Container(),
+                        : Container(),
                     (generalComplaintList.isNotEmpty)
-                        ? 
-                        Container(
+                        ? Container(
                             padding: EdgeInsets.all(media.width * 0.05),
                             child: Button(
                                 onTap: () async {
@@ -214,7 +209,7 @@ class _MakeComplaintState extends State<MakeComplaint> {
                                 text: languages[choosenLanguage]
                                     ['text_submit']),
                           )
-                  : Container()
+                        : Container()
                   ],
                 ),
               ),

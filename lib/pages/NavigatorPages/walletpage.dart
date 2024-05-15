@@ -38,10 +38,10 @@ class _WalletPageState extends State<WalletPage> {
   bool _completed = false;
   String? totleprice;
   bool showtoast = false;
-   final urlController = TextEditingController();
+  final urlController = TextEditingController();
   @override
   void initState() {
-      urlController.text = url;
+    urlController.text = url;
     getWallet();
     super.initState();
   }
@@ -55,12 +55,12 @@ class _WalletPageState extends State<WalletPage> {
       valueNotifierBook.incrementNotifier();
     }
   }
-  final url = 
-  //" https://secure.3gdirectpay.com/payv3.php?ID=token";
+
+  final url =
+      //" https://secure.3gdirectpay.com/payv3.php?ID=token";
       "https://secure.3gdirectpay.com/payv3.php?ID=E7045C50-E58C-492E-BB08-2A765C97F913";
   _handlePaymentInitialization() async {
     final style = DPOStyle(
-      
       appBarText: "DPO",
       buttonColor: Colors.red,
       buttonTextStyle: TextStyle(
@@ -68,7 +68,7 @@ class _WalletPageState extends State<WalletPage> {
         fontSize: 16,
       ),
       appBarColor: Colors.white,
-      
+
       dialogCancelTextStyle: TextStyle(
         color: Colors.brown,
         fontSize: 18,
@@ -81,9 +81,9 @@ class _WalletPageState extends State<WalletPage> {
       mainTextStyle:
           TextStyle(color: Colors.indigo, fontSize: 19, letterSpacing: 2),
       dialogBackgroundColor: Colors.red,
-     // appBarIcon: Icon(Icons.message, color: Colors.purple),
+      // appBarIcon: Icon(Icons.message, color: Colors.purple),
       buttonText: "Proceed",
-      
+
       appBarTitleTextStyle: TextStyle(
         color: Colors.black,
         fontSize: 18,
@@ -96,7 +96,7 @@ class _WalletPageState extends State<WalletPage> {
       isTestMode: false,
       paymentUrl: urlController.text,
     );
-print('url::::::::::::::::::${urlController.text}');
+    print('url::::::::::::::::::${urlController.text}');
     final ChargeResponse response = await dpo.charge();
     if (response != null) {
       showLoading(response.status!);
@@ -126,11 +126,11 @@ print('url::::::::::::::::::${urlController.text}');
       },
     );
   }
- _onPressed() {
-  
-      _handlePaymentInitialization();
-    
+
+  _onPressed() {
+    _handlePaymentInitialization();
   }
+
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = const [
       DropdownMenuItem(value: "user", child: Text("User")),
@@ -167,8 +167,7 @@ print('url::::::::::::::::::${urlController.text}');
               textDirection: (languageDirection == 'rtl')
                   ? TextDirection.rtl
                   : TextDirection.ltr,
-              child: 
-              Scaffold(
+              child: Scaffold(
                 body: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -483,8 +482,6 @@ print('url::::::::::::::::::${urlController.text}');
                                       bottom: media.width * 0.05),
                                   child: Button(
                                       onTap: () {
-                                  
-                  
                                         if (_addPayment == false) {
                                           setState(() {
                                             _addPayment = true;
@@ -568,7 +565,7 @@ print('url::::::::::::::::::${urlController.text}');
                                                   setState(() {
                                                     addMoney = int.parse(val);
                                                     totleprice = val;
-                                                  //  print('addd money:::::::::::::${addMoney}');
+                                                    //  print('addd money:::::::::::::${addMoney}');
                                                   });
                                                 },
                                                 keyboardType:
@@ -739,7 +736,8 @@ print('url::::::::::::::::::${urlController.text}');
                                                 setState(() {
                                                   _choosePayment = true;
                                                   _addPayment = false;
-                                                    print('addd money:::::::::::::${addMoneyController.text}');
+                                                  print(
+                                                      'addd money:::::::::::::${addMoneyController.text}');
                                                 });
                                               }
                                             },
@@ -1035,37 +1033,37 @@ print('url::::::::::::::::::${urlController.text}');
                                                         ),
                                                       ))
                                                   : Container(),
-                                                  Container(
-                                                      margin: EdgeInsets.only(
-                                                          bottom: media.width *
-                                                              0.025),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: media.width * 0.7,
-                                                      child: InkWell(
-                                                        onTap: () async {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          DPOPayment(Totalprice:addMoneyController.text ,)));
-                                                        //  _onPressed();
-                                                        
-                                                        },
-                                                        child: Container(
-                                                          width: media.width *
-                                                              0.25,
-                                                          height: media.width *
-                                                              0.125,
-                                                          decoration: const BoxDecoration(
-                                                              image: DecorationImage(
-                                                                  image: AssetImage(
-                                                                      'assets/images/dpo.png'),
-                                                                  fit: BoxFit
-                                                                      .contain)),
-                                                        ),
-                                                      ))
+                                              Container(
+                                                  margin: EdgeInsets.only(
+                                                      bottom:
+                                                          media.width * 0.025),
+                                                  alignment: Alignment.center,
+                                                  width: media.width * 0.7,
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      DPOPayment(
+                                                                        Totalprice:
+                                                                            addMoneyController.text,
+                                                                      )));
+                                                      //  _onPressed();
+                                                    },
+                                                    child: Container(
+                                                      width: media.width * 0.25,
+                                                      height:
+                                                          media.width * 0.125,
+                                                      decoration: const BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: AssetImage(
+                                                                  'assets/images/dpo.png'),
+                                                              fit: BoxFit
+                                                                  .contain)),
+                                                    ),
+                                                  ))
                                             ],
                                           ),
                                         ),
@@ -1077,9 +1075,6 @@ print('url::::::::::::::::::${urlController.text}');
                             ),
                           ))
                         : Container(),
-
-
-                        
 
                     //no internet
                     (internet == false)
@@ -1291,9 +1286,6 @@ print('url::::::::::::::::::${urlController.text}');
                         ? const Positioned(child: Loading())
                         : Container()
                   ],
-              
-              
-              
                 ),
               ),
             );

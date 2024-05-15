@@ -1,5 +1,9 @@
 Map<String, dynamic> languages = {
   "de": {
+    "text_resetPasswor":"Reset Password",
+    "text_signup":"Signup",
+    "text_forgotP": "Forgot Password",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "Oder betreten Sie soziale Medien",
     "text_sign_up": "Anmeldung",
     "text_track_location": "Tracking -Fahrerort",
@@ -417,6 +421,9 @@ Map<String, dynamic> languages = {
     "text_delivery": "Lieferung"
   },
   "en": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
     "text_enter_social": "or Enter Social Media",
     "text_sign_up": "Sign Up",
     "text_track_location": "Tracking Driver Location",
@@ -426,6 +433,7 @@ Map<String, dynamic> languages = {
     "text_next": "next",
     "text_your_ride": "Your ride, on demand",
     "text_login": "Login",
+    "text_forgotPassword": "ForgotPassword?",
     "text_phone_number": "phone number",
     "text_get_started": "Let's Get Started!",
     "text_fill_form": "Fill the form to continue.",
@@ -818,6 +826,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Delivery"
   },
   "fr": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "ou entrez les médias sociaux",
     "text_sign_up": "S'inscrire",
     "text_track_location": "Emplacement du conducteur de suivi",
@@ -1230,6 +1242,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Livraison"
   },
   "ar": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "أو ادخال وسط تخزين اجتماعي ",
     "text_sign_up": "تسجيل المستخدم ",
     "text_track_location": "تتبع مكان برنامج التشغيل ",
@@ -1629,6 +1645,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "التسليم"
   },
   "tr": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "veya sosyal medyaya girin",
     "text_sign_up": "Üye olmak",
     "text_track_location": "İzleme Sürücü Konumu",
@@ -2032,6 +2052,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Teslimat"
   },
   "ru": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "или войти в социальные сети",
     "text_sign_up": "Зарегистрироваться",
     "text_track_location": "Расположение водителя отслеживания",
@@ -2442,6 +2466,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Доставка"
   },
   "it": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "o inserisci i social media",
     "text_sign_up": "Iscrizione",
     "text_track_location": "Posizione del driver di tracciamento",
@@ -2848,6 +2876,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Consegna"
   },
   "ko": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "또는 소셜 미디어를 입력하십시오",
     "text_sign_up": "가입하기",
     "text_track_location": "추적 드라이버 위치",
@@ -3234,6 +3266,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "배달"
   },
   "zh": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "或进入社交媒体",
     "text_sign_up": "报名",
     "text_track_location": "跟踪驱动程序位置",
@@ -3615,6 +3651,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "送货"
   },
   "es": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "o entrar en las redes sociales",
     "text_sign_up": "Inscribirse",
     "text_track_location": "Localización del conductor de seguimiento",
@@ -4022,6 +4062,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Entrega"
   },
   "pt": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "ou Enter Social Media",
     "text_sign_up": "Cadine Up",
     "text_track_location": "Localização do Motorista de",
@@ -4427,6 +4471,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Entrega"
   },
   "id": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "atau Masukkan Media Sosial ",
     "text_sign_up": "Sign Up ",
     "text_track_location": "Pelacakan Lokasi Driver ",
@@ -4833,6 +4881,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "Pengiriman"
   },
   "iw": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "או להיכנס למדיה חברתית",
     "text_sign_up": "הירשם",
     "text_track_location": "מעקב אחר מיקום הנהג",
@@ -5228,6 +5280,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "מְסִירָה"
   },
   "ur": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "یا سوشل میڈیا میں داخل ",
     "text_sign_up": "سائن اپ کریں ",
     "text_track_location": "ٹریکنگ ڈرائیور مقام ",
@@ -5633,6 +5689,10 @@ Map<String, dynamic> languages = {
     "text_delivery": "نجات"
   },
   "bn": {
+    "text_resetPasswor":"Reset Password",
+    "text_forgotP": "Forgot Password",
+    "text_signup":"Signup",
+    "text_forgotPassword": "ForgotPassword?",
     "text_enter_social": "বা সোশ্যাল মিডিয়া প্রবেশ করুন",
     "text_sign_up": "নিবন্ধন করুন",
     "text_track_location": "ড্রাইভার অবস্থান ট্র্যাকিং",

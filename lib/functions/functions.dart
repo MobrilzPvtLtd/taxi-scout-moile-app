@@ -8,28 +8,21 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:location/location.dart';
 import 'package:tagyourtaxi_driver/pages/login/get_started.dart';
 import 'package:tagyourtaxi_driver/pages/login/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'dart:async';
 import 'package:dpo_standard/dpo.dart';
 import 'package:dpo_standard/models/responses/charge_response.dart';
-import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-
-// import 'package:location/location.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/editprofile.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/history.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/makecomplaint.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loadingpage.dart';
 import 'package:tagyourtaxi_driver/pages/onTripPage/booking_confirmation.dart';
-
 import 'package:tagyourtaxi_driver/pages/onTripPage/map_page.dart';
 import 'package:tagyourtaxi_driver/pages/onTripPage/review_page.dart';
 import 'package:tagyourtaxi_driver/pages/referralcode/referral_code.dart';
-import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -442,9 +435,15 @@ getLocalData() async {
 
 //register user
 
-List<BearerClass> bearerToken = <BearerClass>[];
+List<BearerClass> bearerToken = <BearerClass> [];
 
-registerUser() async {
+registerUser({
+  String? name,
+  String? email,
+  String? password,
+  String? confPassword,
+  String? phNumber,
+}) async {
   bearerToken.clear();
   dynamic result;
   try {
@@ -458,9 +457,11 @@ registerUser() async {
           await http.MultipartFile.fromPath('profile_picture', proImageFile1));
     }
     response.fields.addAll({
-      "name": name,
-      "mobile": phnumber,
-      "email": email,
+      "name": name ?? "",
+      "mobile": phNumber ?? "",
+      "email": email ?? "",
+      "password": password ?? "",
+      "password_confirmation": confPassword ?? "",
       "device_token": fcm,
       "country": countries[phcode]['dial_code'],
       "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
@@ -471,8 +472,9 @@ registerUser() async {
     var respon = await http.Response.fromStream(request);
 
     if (respon.statusCode == 200) {
+      print("response${response.fields}");
       var jsonVal = jsonDecode(respon.body);
-
+       SnackBar(content: Text("Successfully Register"),);
       bearerToken.add(BearerClass(
           type: jsonVal['token_type'].toString(),
           token: jsonVal['access_token'].toString()));
@@ -688,7 +690,7 @@ verifyUser(String number) async {
 }
 
 //user login
-userLogin() async {
+userLogin({String? name, String? email, String? password,}) async {
   bearerToken.clear();
   dynamic result;
   try {
@@ -699,9 +701,109 @@ userLogin() async {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          "mobile": phnumber,
-          'device_token': fcm,
-          "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
+        "name":name,
+        "email":email,
+        "password":password,
+        "password_confirmation":password,
+        "country":"+91",
+        "device_token":fcm,
+        "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
+        // "service_location_id":"hbdfhfuhf32",
+        }));
+    if (response.statusCode == 200) {
+      var jsonVal = jsonDecode(response.body);
+      bearerToken.add(BearerClass(
+          type: jsonVal['token_type'].toString(),
+          token: jsonVal['access_token'].toString()));
+      result = true;
+      pref.setString('Bearer', bearerToken[0].token);
+      if (platform == TargetPlatform.android && package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_package_name': package.packageName.toString()});
+      } else if (package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_bundle_id': package.packageName.toString()});
+      }
+    } else if(result == false) {
+      debugPrint(response.body);
+      result = true;
+    }
+    return result;
+  } catch (e) {
+    if (e is SocketException) {
+      internet = false;
+    }
+  }
+}
+
+// forgot password
+forgotPassword({
+  String? email,
+}) async {
+  bearerToken.clear();
+  dynamic result;
+  try {
+    var token = await FirebaseMessaging.instance.getToken();
+    var fcm = token.toString();
+    var response = await http.post(Uri.parse('${url}api/v1/password/forgot'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "email":email,
+        }));
+    if (response.statusCode == 200) {
+      var jsonVal = jsonDecode(response.body);
+      bearerToken.add(BearerClass(
+          type: jsonVal['token_type'].toString(),
+          token: jsonVal['access_token'].toString()));
+      result = true;
+      pref.setString('Bearer', bearerToken[0].token);
+      if (platform == TargetPlatform.android && package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_package_name': package.packageName.toString()});
+      } else if (package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_bundle_id': package.packageName.toString()});
+      }
+    } else {
+      debugPrint(response.body);
+      result = false;
+    }
+    return result;
+  } catch (e) {
+    if (e is SocketException) {
+      internet = false;
+    }
+  }
+}
+
+// reset password
+resetPassword({
+  String? email,
+  String? password,
+  String? confirmPassword,
+  String? otp,
+}) async {
+  bearerToken.clear();
+  dynamic result;
+  try {
+    var token = await FirebaseMessaging.instance.getToken();
+    var fcm = token.toString();
+    var response = await http.post(Uri.parse('${url}api/v1/password/reset'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "token":fcm,
+          "email":email,
+          "password":password,
+          "password_confirmation":confirmPassword,
+          "otp":otp,
         }));
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);

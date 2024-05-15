@@ -19,6 +19,7 @@ enum Direction {
 class GeoHasher {
   // ignore: prefer_const_declarations
   static final String _baseSequence = '0123456789bcdefghjkmnpqrstuvwxyz';
+
   ///AIzaSyBkkm67QjmV5HoB2HMiwtyL4Xd1lHGEtt0
 
   /// Creates a Map of available characters for a geohash

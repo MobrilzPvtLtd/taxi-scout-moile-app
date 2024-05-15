@@ -22,7 +22,10 @@ class DropLocation extends StatefulWidget {
   // bool pets;
   // bool drinking;
   // bool handicape;
-  DropLocation({Key? key, this.from, }) : super(key: key);
+  DropLocation({
+    Key? key,
+    this.from,
+  }) : super(key: key);
 
   @override
   State<DropLocation> createState() => _DropLocationState();
@@ -594,7 +597,7 @@ class _DropLocationState extends State<DropLocation>
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                      BookingConfirmation()));
+                                                                        BookingConfirmation()));
                                                     if (val) {
                                                       setState(() {});
                                                     }
@@ -955,7 +958,7 @@ class _DropLocationState extends State<DropLocation>
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                   BookingConfirmation()));
+                                                                  BookingConfirmation()));
                                                   if (val) {
                                                     setState(() {});
                                                   }
@@ -1244,8 +1247,7 @@ class _DropLocationState extends State<DropLocation>
                             ),
                           )),
 
-
- //Text('cdvfdgfsdzkz'),
+                      //Text('cdvfdgfsdzkz'),
                       //fav address
                       (favAddressAdd == true)
                           ? Positioned(
@@ -1286,7 +1288,6 @@ class _DropLocationState extends State<DropLocation>
                                     SizedBox(
                                       height: media.width * 0.05,
                                     ),
-                                   
                                     Container(
                                       padding:
                                           EdgeInsets.all(media.width * 0.05),

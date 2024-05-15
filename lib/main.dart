@@ -19,13 +19,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  
   @override
   Widget build(BuildContext context) {
     platform = Theme.of(context).platform;
     return GestureDetector(
         onTap: () {
-         
           FocusScopeNode currentFocus = FocusScope.of(context);
 
           if (!currentFocus.hasPrimaryFocus) {
@@ -37,6 +35,6 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'TexiScout24',
             theme: ThemeData(),
-            home:  LoadingPage()));
+            home: LoadingPage()));
   }
 }
