@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/login/forgot_password.dart';
+import 'package:tagyourtaxi_driver/pages/login/login_otp.dart';
 import 'package:tagyourtaxi_driver/pages/login/otp_page.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/pages/signupPage/signup_screen.dart';
@@ -181,7 +182,7 @@ class _LoginState extends State<Login> {
                                         // Navigate to new screen if login was successful
                                         Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => Maps())
+                                            MaterialPageRoute(builder: (context) => Login_otp(email: _emailController.text ))
                                         );
                                       } else {
                                         // Show a snackbar with error if login failed

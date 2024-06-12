@@ -9,14 +9,14 @@ import '../../translations/translation.dart';
 import '../../widgets/widgets.dart';
 import '../onTripPage/map_page.dart';
 
-class OtpScreen extends StatefulWidget {
-  OtpScreen({key,required this.email});
+class Login_otp extends StatefulWidget {
+  Login_otp({key,required this.email});
   String? email;
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  State<Login_otp> createState() => _Login_otpState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _Login_otpState extends State<Login_otp> {
   TextEditingController _otpController = TextEditingController();
   String? _errorMessage;
   final _formKey = GlobalKey<FormState>();
@@ -73,7 +73,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         String errorMessage ='';
                         if (errorMessage.isEmpty) {
                           // OTP is valid, attempt to verify
-                          bool isOtpValid = await emailVerify(
+                          bool isOtpValid = await loginemailVerify(
                             email: widget.email,
                             otp: _otpController.text,
                           );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
@@ -17,7 +19,8 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
-dynamic imageFile;
+File? imageFile;
+// dynamic imagestore;
 
 class _EditProfileState extends State<EditProfile> {
   ImagePicker picker = ImagePicker();
@@ -52,7 +55,8 @@ class _EditProfileState extends State<EditProfile> {
     if (permission == PermissionStatus.granted) {
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       setState(() {
-        imageFile = pickedFile?.path;
+        imageFile = File(pickedFile!.path);
+        imageFile = File(pickedFile.path);
         _pickImage = false;
       });
     } else {
@@ -68,7 +72,8 @@ class _EditProfileState extends State<EditProfile> {
     if (permission == PermissionStatus.granted) {
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
       setState(() {
-        imageFile = pickedFile?.path;
+        imageFile = File(pickedFile!.path);
+        imageFile = File(pickedFile.path);
         _pickImage = false;
       });
     } else {
@@ -86,12 +91,22 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     _error = '';
-    imageFile = null;
-    name.text = userDetails['name'];
-    email.text = userDetails['email'];
+    imagefunctionforinitstate();
+    name.text = userDetails['name']?? "";
+    email.text = userDetails['email']?? "";
     super.initState();
   }
-
+void imagefunctionforinitstate(){
+    setState(() {
+      String? profile_pictureUrl = userDetails["profile_picture"];
+      if(profile_pictureUrl != null && profile_pictureUrl.isNotEmpty){
+        imageFile = File(profile_pictureUrl);
+      } else{
+        imageFile = null;
+        log("in imagefunctionforinitstate function something error ");
+      }
+    });
+}
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -153,7 +168,7 @@ class _EditProfileState extends State<EditProfile> {
                                       ),
                                       fit: BoxFit.cover)
                                   : DecorationImage(
-                                      image: FileImage(File(imageFile)),
+                                      image: FileImage(File(imageFile!.path)),
                                       fit: BoxFit.cover)),
                         ),
                         SizedBox(
@@ -236,7 +251,7 @@ class _EditProfileState extends State<EditProfile> {
                               } else {
                                 //update image
                                 val =
-                                    await updateProfile(name.text, email.text);
+                                    await updateProfile(name.text, email.text,imageFile?.path.toString());
                               }
                               if (val == 'success') {
                                 pop();
