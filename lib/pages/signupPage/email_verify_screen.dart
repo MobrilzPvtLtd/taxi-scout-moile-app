@@ -103,6 +103,31 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
 
                 ),
+                SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                        onTap: ()async {
+                          String errorMessage ='';
+                          if (errorMessage.isEmpty) {
+                            // OTP is valid, attempt to verify
+                            bool isOtpValid = await resendOtpRegister(
+                              email: widget.email,
+                            );
+
+                          } else {
+                            // Display error message if OTP is not in correct format
+                            setState(() {
+                              _errorMessage = errorMessage;
+                            });
+                          }
+                          // Unfocus keyboard
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
+                        child: Text("Resend Otp")),
+                  ],
+                )
               ],
             ),
           ),

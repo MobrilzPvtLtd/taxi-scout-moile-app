@@ -167,6 +167,9 @@ class _LoginState extends State<Login> {
                               child: Button(
                                 onTap: () async {
                                   if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      _errorMessage = null; // Reset error message
+                                    });
                                     _errorMessage = validateEmail(_emailController.text);
                                     if (_errorMessage == null) {
                                       _errorMessage = validatePassword(_passwordController.text);
@@ -181,21 +184,22 @@ class _LoginState extends State<Login> {
                                       if (loginResult == true) {
                                         // Navigate to new screen if login was successful
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => Login_otp(email: _emailController.text ))
+                                          context,
+                                          MaterialPageRoute(builder: (context) => Login_otp(email: _emailController.text)),
                                         );
                                       } else {
-                                        // Show a snackbar with error if login failed
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text('Email or password is incorrect'))
-                                        );
+                                        setState(() {
+                                          _errorMessage = 'Email or password is incorrect';
+                                        });
                                       }
+                                    } else {
+                                      setState(() {
+                                        _errorMessage = _errorMessage;
+                                      });
                                     }
                                   }
-                                  // Unfocus the keyboard
                                   FocusManager.instance.primaryFocus?.unfocus();
                                 },
-
                                 text: languages[choosenLanguage]['text_login'],
                               ),
                             ),

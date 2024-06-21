@@ -564,6 +564,50 @@ emailVerify({
     }
   }
 }
+
+resendOtpRegister({
+  String? email,
+}) async {
+  bearerToken.clear();
+  dynamic result;
+  try {
+    var token = await FirebaseMessaging.instance.getToken();
+    var fcm = token.toString();
+    var response = await http.post(Uri.parse('${url}api/v1/send-mail-otp'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "email":email,
+          "device_token": fcm,
+        }));
+    if (response.statusCode == 200) {
+      var jsonVal = jsonDecode(response.body);
+      bearerToken.add(BearerClass(
+          type: jsonVal['token_type'].toString(),
+          token: jsonVal['access_token'].toString()));
+      result = true;
+      pref.setString('Bearer', bearerToken[0].token);
+      if (platform == TargetPlatform.android && package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_package_name': package.packageName.toString()});
+      } else if (package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_bundle_id': package.packageName.toString()});
+      }
+    } else {
+      debugPrint(response.body);
+      result = false;
+    }
+    return result;
+  } catch (e) {
+    if (e is SocketException) {
+      internet = false;
+    }
+  }
+}
 loginemailVerify({
   String? email,
   String? otp,
@@ -583,6 +627,50 @@ loginemailVerify({
           "device_token": fcm,
         }));
     develper.log("Email verify ${response.statusCode}===${response.body}");
+    if (response.statusCode == 200) {
+      var jsonVal = jsonDecode(response.body);
+      bearerToken.add(BearerClass(
+          type: jsonVal['token_type'].toString(),
+          token: jsonVal['access_token'].toString()));
+      result = true;
+      pref.setString('Bearer', bearerToken[0].token);
+      if (platform == TargetPlatform.android && package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_package_name': package.packageName.toString()});
+      } else if (package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_bundle_id': package.packageName.toString()});
+      }
+    } else {
+      debugPrint(response.body);
+      result = false;
+    }
+    return result;
+  } catch (e) {
+    if (e is SocketException) {
+      internet = false;
+    }
+  }
+}
+
+resendOtpLogin({
+  String? email,
+}) async {
+  bearerToken.clear();
+  dynamic result;
+  try {
+    var token = await FirebaseMessaging.instance.getToken();
+    var fcm = token.toString();
+    var response = await http.post(Uri.parse('${url}api/v1/send-mail-otp'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "email":email,
+          "device_token": fcm,
+        }));
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);
       bearerToken.add(BearerClass(
@@ -1955,11 +2043,13 @@ createRequest(value, api) async {
     develper.log('user token ${bearerToken[0].token}');
     print('createddd !  $value');
     var response = await http.post(Uri.parse('$url$api'),
+
         headers: {
           'Authorization': 'Bearer ${bearerToken[0].token}',
           'Content-Type': 'application/json',
         },
         body: value);
+    print('value$url$api');
         develper.log("create Request ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       // printWrapped(response.body);
@@ -2068,6 +2158,7 @@ createRequestLater(val, api) async {
         body: val);
 
         develper.log("CreateRequest Later ${response.body}===${response.statusCode}");
+        print('vale$url$api');
     if (response.statusCode == 200) {
       result = 'success';
       streamRequest();
