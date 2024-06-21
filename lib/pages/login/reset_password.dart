@@ -124,12 +124,27 @@ class _ResetPasswordState extends State<ResetPassword> {
                         _errorMessage =
                             validatePassword(_passwordController.text);
                         _errorMessage = validateOtp(_otpController.text);
-                        resetPassword(
-                          email:widget.email,
-                          password: _passwordController.text,
-                          confirmPassword: _confirmPassword.text,
-                          otp: _otpController.text,
-                        );
+                        if (_errorMessage == null) {
+                          var resetResult = await  resetPassword(
+                            email:widget.email,
+                            password: _passwordController.text,
+                            confirmPassword: _confirmPassword.text,
+                            otp: _otpController.text,
+                          );
+                          if (resetResult == true) {
+                            // Navigate to new screen if login was successful
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Login())
+                            );
+                          } else {
+                            // Show a snackbar with error if login failed
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Try another password'))
+                            );
+                          }
+                        }
+
                       }
                       FocusManager.instance.primaryFocus?.unfocus();
                     },

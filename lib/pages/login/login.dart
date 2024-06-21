@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/login/forgot_password.dart';
+import 'package:tagyourtaxi_driver/pages/login/login_otp.dart';
 import 'package:tagyourtaxi_driver/pages/login/otp_page.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/pages/signupPage/signup_screen.dart';
@@ -166,6 +167,9 @@ class _LoginState extends State<Login> {
                               child: Button(
                                 onTap: () async {
                                   if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      _errorMessage = null; // Reset error message
+                                    });
                                     _errorMessage = validateEmail(_emailController.text);
                                     if (_errorMessage == null) {
                                       _errorMessage = validatePassword(_passwordController.text);
@@ -180,21 +184,22 @@ class _LoginState extends State<Login> {
                                       if (loginResult == true) {
                                         // Navigate to new screen if login was successful
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => Maps())
+                                          context,
+                                          MaterialPageRoute(builder: (context) => Login_otp(email: _emailController.text)),
                                         );
                                       } else {
-                                        // Show a snackbar with error if login failed
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text('Email or password is incorrect'))
-                                        );
+                                        setState(() {
+                                          _errorMessage = 'Email or password is incorrect';
+                                        });
                                       }
+                                    } else {
+                                      setState(() {
+                                        _errorMessage = _errorMessage;
+                                      });
                                     }
                                   }
-                                  // Unfocus the keyboard
                                   FocusManager.instance.primaryFocus?.unfocus();
                                 },
-
                                 text: languages[choosenLanguage]['text_login'],
                               ),
                             ),

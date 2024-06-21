@@ -1,5 +1,6 @@
 Map<String, dynamic> languages = {
   "de": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_signup":"Signup",
     "text_forgotP": "Forgot Password",
@@ -95,7 +96,7 @@ Map<String, dynamic> languages = {
         "Geben Sie die OTP auf, die im Mobiltelefon des Kunden angezeigt wird, um die Fahrt zu starten",
     "text_enable_history": "Geschichte",
     "text_enable_wallet": "Geldbörse",
-    "text_enable_referal": "Referal",
+    "text_enable_referal": "Referral",
     "text_faq": "FAQ",
     "text_sos": "SOS",
     "text_change_language": "Sprache ändern",
@@ -421,6 +422,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Lieferung"
   },
   "en": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -512,7 +514,7 @@ Map<String, dynamic> languages = {
         "Enter the OTP displayed in Customer's mobile to start the ride",
     "text_enable_history": "My Trips",
     "text_enable_wallet": "Dumba Wallet",
-    "text_enable_referal": "Referal",
+    "text_enable_referal": "Referral",
     "text_faq": "FAQ",
     "text_sos": "SOS",
     "text_change_language": "Change Language",
@@ -826,6 +828,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Delivery"
   },
   "fr": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -1242,6 +1245,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Livraison"
   },
   "ar": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -1645,6 +1649,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "التسليم"
   },
   "tr": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -2052,6 +2057,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Teslimat"
   },
   "ru": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -2466,6 +2472,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Доставка"
   },
   "it": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -2557,7 +2564,7 @@ Map<String, dynamic> languages = {
         "Immettere l'OTP visualizzato nel cellulare del cliente per iniziare il viaggio",
     "text_enable_history": "Storia",
     "text_enable_wallet": "Portafoglio",
-    "text_enable_referal": "Referel",
+    "text_enable_referal": "Referrel",
     "text_faq": "FAQ",
     "text_sos": "sos",
     "text_change_language": "Cambia lingua",
@@ -2876,6 +2883,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Consegna"
   },
   "ko": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -3266,6 +3274,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "배달"
   },
   "zh": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -3651,6 +3660,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "送货"
   },
   "es": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -4062,6 +4072,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Entrega"
   },
   "pt": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -4471,6 +4482,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Entrega"
   },
   "id": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -4562,7 +4574,7 @@ Map<String, dynamic> languages = {
         "Masukkan OTP yang ditampilkan dalam ponsel Pelanggan untuk memulai perjalanan ",
     "text_enable_history": "Perjalanan Saya ",
     "text_enable_wallet": "Dompet Dumba ",
-    "text_enable_referal": "Referal ",
+    "text_enable_referal": "Referral ",
     "text_faq": "FAQ ",
     "text_sos": "SOS ",
     "text_change_language": "Ubah Bahasa ",
@@ -4881,6 +4893,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "Pengiriman"
   },
   "iw": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -5280,6 +5293,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "מְסִירָה"
   },
   "ur": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",
@@ -5689,6 +5703,7 @@ Map<String, dynamic> languages = {
     "text_delivery": "نجات"
   },
   "bn": {
+    "email_verify": "Please verify account",
     "text_resetPasswor":"Reset Password",
     "text_forgotP": "Forgot Password",
     "text_signup":"Signup",

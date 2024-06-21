@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../functions/functions.dart';
 import '../../styles/styles.dart';
 import '../../translations/translation.dart';
 import '../../widgets/widgets.dart';
 import '../login/login.dart';
+import 'email_verify_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({key});
@@ -16,6 +20,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+
+  File? imagefile;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -39,6 +45,60 @@ class _SignupScreenState extends State<SignupScreen> {
       r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
       r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
       r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])');
+
+      Future camera()async{
+      final cameraFile = await ImagePicker().pickImage(source: ImageSource.camera,imageQuality: 50);
+      if(cameraFile == null)return;
+      setState(() {
+        imagefile = File(cameraFile.path);
+        imagefile = File(cameraFile.path);
+      });
+
+    }
+     Future Galleryimage()async{
+      final galleryFile = await ImagePicker().pickImage(source: ImageSource.gallery,imageQuality: 50);
+      if(galleryFile == null)return;
+      setState(() {
+        imagefile = File(galleryFile.path);
+        imagefile = File(galleryFile.path);
+      });
+
+    }
+
+      void showDialogbox(){
+    showDialog(
+      barrierDismissible: false, 
+      context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Upload Profile Picture"),
+        content: Column(
+            mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+                  onTap: () {
+                    Navigator.pop(context);
+                    // selectImage();
+                    Galleryimage();
+                    
+                  },
+                  title: const Text("select form Gallery"),
+                  leading: const Icon(Icons.photo_album_outlined),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.pop(context);
+                    camera();
+
+                  },
+                  title: const Text("Take a photo"),
+                  leading: const Icon(CupertinoIcons.camera),
+                ),
+          ],
+        ),
+      );
+    },);
+    
+      }
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -67,9 +127,30 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: media.width * twentysix,
                       fontWeight: FontWeight.bold,
                       color: textColor),
+                ),SizedBox(
+                  height: 40,
+                ),
+                Center(
+                  child: CupertinoButton(
+                    onPressed: () => showDialogbox() ,
+                    child: CircleAvatar(
+                      child:  (imagefile == null)
+                              ? Icon(
+                                  CupertinoIcons.person,
+                                  color: Color.fromARGB(255, 30, 31, 32),
+                                  size: 60,
+                                )
+                              : null,
+                      backgroundColor: Color.fromARGB(255, 202, 202, 202),
+                      radius: 60,
+                      backgroundImage: (imagefile != null)
+                              ? FileImage(imagefile!)
+                              : null,
+                    ),
+                  ),
                 ),
                 SizedBox(
-                  height: 60,
+                  height: 15,
                 ),
                 TextFormField(
                   controller: _nameController,
@@ -206,30 +287,54 @@ class _SignupScreenState extends State<SignupScreen> {
                       String password = _passwordController.text;
                       String confirmPassword = _passwordConfirmController.text;
                       if (_formKey.currentState!.validate()) {
-                        _errorMessage =
-                            validateEmail(_emailController.text);
-                        _errorMessage = validatePassword(
-                            _passwordController.text);
+                        _errorMessage = validateEmail(_emailController.text);
+                        _errorMessage = validatePassword(_passwordController.text);
                       }
-                      registerUser(
+                      // Register the driver asynchronously
+                      var registrationResult = await registerUser(
+                        image: imagefile,
                         name: _nameController.text,
                         email: _emailController.text,
                         password: _passwordController.text,
                         phNumber: _mobileController.text,
                         confPassword: _passwordConfirmController.text,
                       );
-                      Navigator.pop(context);
-                      if(password != confirmPassword){
+                      if (registrationResult == "true") {
                         setState(() {
-                          SnackBar(content:Text('Password and confirm password do not match') );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please verify your email')),
+                          );
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  OtpScreen(email: _emailController.text,)),
+                        );
+                      } else {
+                        // Registration failed, show error message in a Snackbar
+                        setState(() {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Registration failed. Please try again later.')),
+                          );
+                        });
+                      }
+                      // Check if passwords match
+                      if (password != confirmPassword) {
+                        setState(() {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Password and confirm password do not match')),
+                          );
                         });
                         return;
                       }
+                      // Hide keyboard
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
                     text: languages[choosenLanguage]['text_signup'],
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                )
               ],
             ),
           ),
@@ -254,4 +359,6 @@ class _SignupScreenState extends State<SignupScreen> {
     // }
     return null;
   }
-}
+
+  
+  }

@@ -2585,24 +2585,22 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                               ))
                                           : Container()
                                       : Positioned(
-                                          bottom: 0,
-                                          child: Container(
-                                            height: 100,
-                                            width: media.width * 1,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(12.0),
-                                                    topRight:
-                                                        Radius.circular(12.0)),
-                                                color: Colors.white),
-                                            child: Center(
-                                                child: Text(
-                                              'Data Not Found',
-                                              style: TextStyle(fontSize: 17.0),
-                                            )),
-                                          ),
-                                        ),
+                                    bottom: 0,
+                                    child: Container(
+                                      height: 100,
+                                      width: media.width * 1,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft:
+                                              Radius.circular(12.0),
+                                              topRight:
+                                              Radius.circular(12.0)),
+                                          color: Colors.white),
+                                      child: Center(
+                                          child: Loading(),),
+                                    ),
+                                  ),
+
 
                                   //Container(child: Text('data Second'),),
 
