@@ -871,7 +871,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         width: media.width * 0.025,
                       ),
                       Text(
-                        'Referal',
+                        'Referral',
                         // languages[choosenLanguage]
                         //     ['text_enable_referal'],
                         overflow: TextOverflow.ellipsis,
