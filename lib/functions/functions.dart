@@ -624,7 +624,6 @@ loginemailVerify({
         body: jsonEncode({
           "email":email,
           "otp":otp,
-          "device_token": fcm,
         }));
     develper.log("Email verify ${response.statusCode}===${response.body}");
     if (response.statusCode == 200) {
