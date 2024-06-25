@@ -9,7 +9,7 @@ import '../../functions/functions.dart';
 import '../../styles/styles.dart';
 import '../../translations/translation.dart';
 import '../../widgets/widgets.dart';
-import '../login/login.dart';
+
 import 'email_verify_screen.dart';
 
 class SignupScreen extends StatefulWidget {
