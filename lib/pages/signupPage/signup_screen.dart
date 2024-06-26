@@ -307,7 +307,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         });
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>  OtpScreen(email: _emailController.text,)),
+                          MaterialPageRoute(builder: (context) =>  LoginOtpScreen(email: _emailController.text,)),
                         );
                       } else {
                         // Registration failed, show error message in a Snackbar
@@ -362,4 +362,3 @@ class _SignupScreenState extends State<SignupScreen> {
 
   
   }
-

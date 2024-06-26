@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:async';
-import 'dart:convert';
+import "dart:developer" as develper;
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -45,13 +45,18 @@ bool internet = true;
 //   https://dumbadpo.appnexustech.in
 //base url
 String url = 'https://www.mobrilz.digital/admin/public/';
+
 // 'https://www.mobrilz.digital/admin/public/';
 
 String mapkey = 'AIzaSyAhZQSz7cUgNdkv1V05EjT26V_UtKSH5y4';
 
 //check internet connection
+
 //
+
+// dev.log("s");
 _handlePaymentInitialization(BuildContext context) async {
+  develper.log(url);
   final style = DPOStyle(
     appBarText: "DPO",
     buttonColor: Colors.red,
@@ -90,6 +95,7 @@ _handlePaymentInitialization(BuildContext context) async {
   );
 
   final ChargeResponse response = await dpo.charge();
+  develper.log("chageResponse ${response.success}");
   if (response != null) {
     showLoading(response.status!, context);
     print("${response.toJson()}");
@@ -203,6 +209,7 @@ positionStreamData() {
   }).listen((Position? position) {
     if (position != null) {
       currentLocation = LatLng(position.latitude, position.longitude);
+      develper.log("currentLOcation $currentLocation");
     } else {
       positionStream!.cancel();
     }
@@ -217,6 +224,8 @@ validateEmail() async {
     var response = await http.post(
         Uri.parse('${url}api/v1/user/validate-mobile'),
         body: {'email': email});
+
+        develper.log("Validate mail ${response.statusCode} === ${response.body}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['success'] == true) {
         result = 'success';
@@ -225,6 +234,7 @@ validateEmail() async {
         result = 'failed';
       }
     } else if (response.statusCode == 422) {
+        develper.log("Validate mail statuscode 422 ${response.statusCode} === ${response.body}");
       debugPrint(response.body);
       var error = jsonDecode(response.body)['errors'];
       result = error[error.keys.toList()[0]]
@@ -322,6 +332,8 @@ getCountryCode() async {
   try {
     final response = await http.get(Uri.parse('${url}api/v1/countries'));
 
+    develper.log("get country code ${response} === ${response.statusCode} == ${response.body}");
+
     if (response.statusCode == 200) {
       countries = jsonDecode(response.body)['data'];
       phcode =
@@ -358,9 +370,11 @@ phoneAuth(String phone) async {
       verificationCompleted: (PhoneAuthCredential credential) async {
         credentials = credential;
         valueNotifierHome.incrementNotifier();
+        develper.log("phoneAuth ${credential.token} ${credentials}=== ${email}");
       },
       forceResendingToken: resendTokenId,
       verificationFailed: (FirebaseAuthException e) {
+        develper.log("phoneAuth  ${resendTokenId}=== ${email}++++${e.email}=== ${e.phoneNumber}");
         if (e.code == 'invalid-phone-number') {
           debugPrint('The provided phone number is not valid.');
         }
@@ -522,6 +536,7 @@ emailVerify({
           "otp":otp,
           "device_token": fcm,
         }));
+        develper.log("Email verify ${response.statusCode}===${response.body}");
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);
       bearerToken.add(BearerClass(
@@ -550,6 +565,138 @@ emailVerify({
   }
 }
 
+resendOtpRegister({
+  String? email,
+}) async {
+  bearerToken.clear();
+  dynamic result;
+  try {
+    var token = await FirebaseMessaging.instance.getToken();
+    var fcm = token.toString();
+    var response = await http.post(Uri.parse('${url}api/v1/send-mail-otp'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "email":email,
+          "device_token": fcm,
+        }));
+    if (response.statusCode == 200) {
+      var jsonVal = jsonDecode(response.body);
+      bearerToken.add(BearerClass(
+          type: jsonVal['token_type'].toString(),
+          token: jsonVal['access_token'].toString()));
+      result = true;
+      pref.setString('Bearer', bearerToken[0].token);
+      if (platform == TargetPlatform.android && package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_package_name': package.packageName.toString()});
+      } else if (package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_bundle_id': package.packageName.toString()});
+      }
+    } else {
+      debugPrint(response.body);
+      result = false;
+    }
+    return result;
+  } catch (e) {
+    if (e is SocketException) {
+      internet = false;
+    }
+  }
+}
+loginemailVerify({
+  String? email,
+  String? otp,
+}) async {
+  bearerToken.clear();
+  dynamic result;
+  try {
+    var token = await FirebaseMessaging.instance.getToken();
+    var fcm = token.toString();
+    var response = await http.post(Uri.parse('${url}api/v1/user/login/validate-otp'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "email":email,
+          "otp":otp,
+        }));
+    develper.log("Email verify ${response.statusCode}===${response.body}");
+    if (response.statusCode == 200) {
+      var jsonVal = jsonDecode(response.body);
+      bearerToken.add(BearerClass(
+          type: jsonVal['token_type'].toString(),
+          token: jsonVal['access_token'].toString()));
+      result = true;
+      pref.setString('Bearer', bearerToken[0].token);
+      if (platform == TargetPlatform.android && package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_package_name': package.packageName.toString()});
+      } else if (package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_bundle_id': package.packageName.toString()});
+      }
+    } else {
+      debugPrint(response.body);
+      result = false;
+    }
+    return result;
+  } catch (e) {
+    if (e is SocketException) {
+      internet = false;
+    }
+  }
+}
+
+resendOtpLogin({
+  String? email,
+}) async {
+  bearerToken.clear();
+  dynamic result;
+  try {
+    var token = await FirebaseMessaging.instance.getToken();
+    var fcm = token.toString();
+    var response = await http.post(Uri.parse('${url}api/v1/send-mail-otp'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "email":email,
+          "device_token": fcm,
+        }));
+    if (response.statusCode == 200) {
+      var jsonVal = jsonDecode(response.body);
+      bearerToken.add(BearerClass(
+          type: jsonVal['token_type'].toString(),
+          token: jsonVal['access_token'].toString()));
+      result = true;
+      pref.setString('Bearer', bearerToken[0].token);
+      if (platform == TargetPlatform.android && package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_package_name': package.packageName.toString()});
+      } else if (package != null) {
+        await FirebaseDatabase.instance
+            .ref()
+            .update({'user_bundle_id': package.packageName.toString()});
+      }
+    } else {
+      debugPrint(response.body);
+      result = false;
+    }
+    return result;
+  } catch (e) {
+    if (e is SocketException) {
+      internet = false;
+    }
+  }
+}
 paymentgetways(
     String tolleprice,
     String firstname,
@@ -579,10 +726,12 @@ paymentgetways(
           'companyRef': '34TESTREFF'
           //  "refferal_code": referralCode
         }));
+        develper.log("paymentGateway ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       String jsonResponse = response.body;
 
       Map<String, dynamic> responseMap = json.decode(jsonResponse);
+       develper.log("paymentGateway ${responseMap}===${response.statusCode}");
       if (responseMap['success'] == true) {
         paymentrils = responseMap['payment_url'];
         print('Payment URL: $paymentrils');
@@ -666,6 +815,7 @@ updateReferral() async {
               'Content-Type': 'application/json'
             },
             body: jsonEncode({"refferal_code": referralCode}));
+            develper.log("updateReferral ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['success'] == true) {
         result = 'true';
@@ -692,6 +842,7 @@ otpCall() async {
   try {
     var otp = await FirebaseDatabase.instance.ref().child('call_FB_OTP').get();
     result = otp;
+    develper.log("otp ${otp}== ${result}");
   } catch (e) {
     if (e is SocketException) {
       internet = false;
@@ -702,6 +853,7 @@ otpCall() async {
   return result;
 }
 
+
 // verify user already exist
 
 verifyUser(String number) async {
@@ -710,7 +862,7 @@ verifyUser(String number) async {
     var response = await http.post(
         Uri.parse('${url}api/v1/user/validate-mobile-for-login'),
         body: {"mobile": number});
-
+develper.log("verify USer ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       val = jsonDecode(response.body)['success'];
 
@@ -758,8 +910,11 @@ userLogin({String? name, String? email, String? password,}) async {
         "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
         // "service_location_id":"hbdfhfuhf32",
         }));
+
+        develper.log("USerLOgin ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);
+      develper.log("userLogin second ${jsonVal}===${response.statusCode}");
       bearerToken.add(BearerClass(
           type: jsonVal['token_type'].toString(),
           token: jsonVal['access_token'].toString()));
@@ -802,8 +957,10 @@ forgotPassword({
         body: jsonEncode({
           "email":email,
         }));
+        develper.log("Forget password ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);
+      develper.log(" Forget Password ${jsonVal}===${response.statusCode}");
       bearerToken.add(BearerClass(
           type: jsonVal['token_type'].toString(),
           token: jsonVal['access_token'].toString()));
@@ -853,8 +1010,10 @@ resetPassword({
           "password_confirmation":confirmPassword,
           "otp":otp,
         }));
+        develper.log("reset Password ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);
+      develper.log("resetPassword ${jsonVal}===${response.statusCode}");
       bearerToken.add(BearerClass(
           type: jsonVal['token_type'].toString(),
           token: jsonVal['access_token'].toString()));
@@ -881,7 +1040,7 @@ resetPassword({
   }
 }
 
-Map<String, dynamic> userDetails = {};
+Map<String, dynamic>  userDetails = {};
 List favAddress = [];
 List tripStops = [];
 
@@ -896,17 +1055,23 @@ getUserDetails() async {
         'Authorization': 'Bearer ${bearerToken[0].token}'
       },
     );
+
+    develper.log("get USer Details ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       userDetails =
           Map<String, dynamic>.from(jsonDecode(response.body)['data']);
+        
+          develper.log("${response.body}get User Details");
       favAddress = userDetails['favouriteLocations']['data'];
       sosData = userDetails['sos']['data'];
+
       if (userDetails['onTripRequest'] != null) {
         if (userRequestData != userDetails['onTripRequest']['data']) {
           // audioPlayer.play(audio);
         }
         addressList.clear();
         userRequestData = userDetails['onTripRequest']['data'];
+        develper.log("get USer ${userDetails} ${response.statusCode}");
         if (userRequestData['transport_type'] == 'taxi') {
           choosenTransportType = 0;
         } else {
@@ -1137,9 +1302,12 @@ geoCoding(double lat, double lng) async {
     var response = await http.get(Uri.parse(
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$mapkey'));
 
+        develper.log("geoCoding  ${response.body}===${response.statusCode}");
+
     if (response.statusCode == 200) {
       var val = jsonDecode(response.body);
       result = val['results'][0]['formatted_address'];
+      develper.log("geo Coding ${val}===${result}");
     } else {
       debugPrint(response.body);
       result = '';
@@ -1164,6 +1332,7 @@ getlangid() async {
     }, body: {
       'lang': choosenLanguage,
     });
+    develper.log("getlangid ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['success'] == true) {
         result = 'success';
@@ -1182,6 +1351,7 @@ getlangid() async {
     } else {
       debugPrint(response.body);
       result = jsonDecode(response.body)['message'];
+      develper.log("getLangid  ${response.body}===${response.statusCode}");
     }
   } catch (e) {
     if (e is SocketException) {
@@ -1207,7 +1377,10 @@ getAutoAddress(input, sessionToken, lat, lng) async {
       response = await http.get(Uri.parse(
           'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&library=places&location=$lat%2C$lng&radius=2000&components=country:$countryCode&key=$mapkey&sessiontoken=$sessionToken'));
     }
+
+    develper.log("getAuto Address ${response}====");
     if (response.statusCode == 200) {
+      develper.log("get Auto Address ${response.body}===${response.statusCode}");
       addAutoFill = jsonDecode(response.body)['predictions'];
       // ignore: avoid_function_literals_in_foreach_calls
       addAutoFill.forEach((element) {
@@ -1239,9 +1412,12 @@ geoCodingForLatLng(placeid) async {
     var response = await http.get(Uri.parse(
         'https://maps.googleapis.com/maps/api/place/details/json?placeid=$placeid&key=$mapkey'));
 
+        develper.log("geoCoding For Latlng ${response.body}===${response.statusCode}");
+
     if (response.statusCode == 200) {
       var val = jsonDecode(response.body)['result']['geometry']['location'];
       center = LatLng(val['lat'], val['lng']);
+      develper.log("geo Coding For LAt lng ${val}===${center}");
     } else {
       debugPrint(response.body);
     }
@@ -1320,10 +1496,13 @@ getPolylines() async {
     try {
       var response = await http.get(Uri.parse(
           'https://maps.googleapis.com/maps/api/directions/json?origin=$pickLat%2C$pickLng&destination=$dropLat%2C$dropLng&avoid=ferries|indoor&transit_mode=bus&mode=driving&key=$mapkey'));
+     develper.log("get Polylines ${response.body}===${response.statusCode} ===$response");
+     
       if (response.statusCode == 200) {
         var steps = jsonDecode(response.body)['routes'][0]['overview_polyline']
             ['points'];
         decodeEncodedPolyline(steps);
+        develper.log("get POlylines ${steps}");
       } else {
         debugPrint(response.body);
       }
@@ -1415,11 +1594,13 @@ getGoodsList() async {
   goodsTypeList.clear();
   try {
     var response = await http.get(Uri.parse('${url}api/v1/common/goods-types'));
+    develper.log("getGoodsList ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       // printWrapped(response.body);
       goodsTypeList = jsonDecode(response.body)['data'];
       valueNotifierBook.incrementNotifier();
       result = 'success';
+      develper.log("get Good List ${goodsTypeList}===${valueNotifierBook}===$result");
     } else {
       debugPrint(response.body);
       result = 'false';
@@ -1466,7 +1647,10 @@ class DropStops {
 
 List etaDetails = [];
 
+// String bearertoken ="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiZjIzNzk3ZWRmNzk1YjRhN2YzN2Q4MTQwNTM5MDhlZjNlOGQ3OTdkNGRmMTM3NzdhMGMyZjEyMGIzZTVhMDgxNTJkNjk4MDA2NTcyZTE2ZDQiLCJpYXQiOjE3MTgwOTY4MTYuNDY2ODMsIm5iZiI6MTcxODA5NjgxNi40NjY4MzMsImV4cCI6MTcxODk2MDgxNi40NTE1MTksInN1YiI6IjEyMyIsInNjb3BlcyI6W119.Bwa6PDFZd7GFsVxGx1Be09iODa4cqgqVKLkrzj8k8n_UNXABxgmqUZhJPvydicm3u5t4-9tlqs2OkcINnUnNNEnt6fur14n1pXlZWovxCerc3U6DMLdyepbYzjq41Al-S_UFkR59WoOAqBYyVwi-BFL8w4vmwfcrLVsSLaWci-CqgRt37sjIgwrHU-uIV-q0LKYr958VDbKNZ0zMuLOU9Fb8kxv68TsfJ2d9MpnQ5tLzAo2iPEC8frfBRjPU5VScx31RHRI-n-YH-0u7xRba4oUjHMq0oz9uhHNuTC1VgvCqSx24xsSs7wNAiSQEl6nvGTwfSDx9zsr0kRuVySYzBDqh4bvwg9mozqQo22ULaS43Q5DM--MuXYQ896uBl7bfXNVLp9hGxDd4QHrl8fA-lZBuq_mwHdBxz6Q32_mnUjuftLHJhzyZqMWHZIQSOWjg0QHIUpbc4jyl_HfOEqR4VZ3MAIguKgvwoEu37fNYWMPX5nWALZG6HbgTCU3_4PKQI1Pp3noi4I0N9haek4T1fAiDrOZlw0bdiiEs69VeVVdSFez4nFLQdoZq9pxOeSs7xG_Dy6flerTb3QL4j-fri25HjmBKGb9zroXmsk6Eqg2lGWcyWl29Xk_FTtF23006P5JGqwvhiOSnXsay2UA61p_a73Do7xv3sHZAOkGzkO8";
+
 //eta request
+// car data this api show list of car service on user phone
 
 etaRequest(bool smoking, bool pets, bool drinking, bool handicap) async {
   dynamic result;
@@ -1530,7 +1714,7 @@ etaRequest(bool smoking, bool pets, bool drinking, bool handicap) async {
                     "drinking": drinking,
                     "handicaped": handicap
                   }));
-
+develper.log("etaRequest ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       print('eta started');
 
@@ -1722,7 +1906,7 @@ etaRequestWithPromo() async {
                     'ride_type': 1,
                     'promo_code': promoCode
                   }));
-
+develper.log("etaRequestWith Promo ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       etaDetails = jsonDecode(response.body)['data'];
       promoCode = '';
@@ -1771,6 +1955,7 @@ rentalEta() async {
               'transport_type':
                   (choosenTransportType == 0) ? 'taxi' : 'delivery'
             }));
+            develper.log("rentalEta ${response.body}===${response.statusCode}");
 
     if (response.statusCode == 200) {
       etaDetails = jsonDecode(response.body)['data'];
@@ -1811,6 +1996,8 @@ rentalRequestWithPromo() async {
               'promo_code': promoCode
             }));
 
+            develper.log("rental RequestWith Promo ${response.body}===${response.statusCode}");
+
     if (response.statusCode == 200) {
       etaDetails = jsonDecode(response.body)['data'];
       rentalOption = etaDetails[0]['typesWithPrice']['data'];
@@ -1845,21 +2032,24 @@ calculateDistance(lat1, lon1, lat2, lon2) {
   return val;
 }
 
-Map<String, dynamic> userRequestData = {};
+Map<String, dynamic > userRequestData = {};
 
 //create request
 
 createRequest(value, api) async {
   dynamic result;
   try {
-    print('user token ${bearerToken[0].token}');
+    develper.log('user token ${bearerToken[0].token}');
     print('createddd !  $value');
     var response = await http.post(Uri.parse('$url$api'),
+
         headers: {
           'Authorization': 'Bearer ${bearerToken[0].token}',
           'Content-Type': 'application/json',
         },
         body: value);
+    print('value$url$api');
+        develper.log("create Request ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       // printWrapped(response.body);
       userRequestData = jsonDecode(response.body)['data'];
@@ -1965,6 +2155,9 @@ createRequestLater(val, api) async {
           'Content-Type': 'application/json',
         },
         body: val);
+
+        develper.log("CreateRequest Later ${response.body}===${response.statusCode}");
+        print('vale$url$api');
     if (response.statusCode == 200) {
       result = 'success';
       streamRequest();
@@ -2031,6 +2224,8 @@ createRequestLaterPromo() async {
           'is_later': true,
           'request_eta_amount': etaDetails[choosenVehicle]['total']
         }));
+
+        develper.log("Create Request later Promo ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       myMarkers.clear();
       streamRequest();
@@ -2092,6 +2287,8 @@ createRentalRequest() async {
           'request_eta_amount': rentalOption[choosenVehicle]['fare_amount'],
           'rental_pack_id': etaDetails[rentalChoosenOption]['id']
         }));
+
+        develper.log("CreateRentalRequest ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       userRequestData = jsonDecode(response.body)['data'];
       streamRequest();
@@ -2153,6 +2350,7 @@ createRentalRequestWithPromo() async {
           'request_eta_amount': rentalOption[choosenVehicle]['fare_amount'],
           'rental_pack_id': etaDetails[rentalChoosenOption]['id']
         }));
+        develper.log("create Rental Request With Promo ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       userRequestData = jsonDecode(response.body)['data'];
       streamRequest();
@@ -2214,6 +2412,7 @@ createRentalRequestLater() async {
           'request_eta_amount': rentalOption[choosenVehicle]['fare_amount'],
           'rental_pack_id': etaDetails[rentalChoosenOption]['id']
         }));
+        develper.log("Create Retal Request Later ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       result = 'success';
       streamRequest();
@@ -2274,6 +2473,7 @@ createRentalRequestLaterPromo() async {
           'request_eta_amount': rentalOption[choosenVehicle]['fare_amount'],
           'rental_pack_id': etaDetails[rentalChoosenOption]['id'],
         }));
+        develper.log("Create Rental Request Later Promo ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       myMarkers.clear();
       streamRequest();
@@ -2352,6 +2552,7 @@ cancelRequest() async {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({'request_id': userRequestData['id']}));
+        develper.log("Cancel Request ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       userCancelled = true;
       FirebaseDatabase.instance
@@ -2388,6 +2589,7 @@ cancelLaterRequest(val) async {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({'request_id': val}));
+        develper.log("Cancel LAter Request ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       userRequestData = {};
       if (requestStreamStart?.isPaused == false ||
@@ -2419,6 +2621,7 @@ cancelRequestWithReason(reason) async {
         },
         body: jsonEncode(
             {'request_id': userRequestData['id'], 'reason': reason}));
+            develper.log("cancel Request With Reason ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       cancelRequestByUser = true;
       FirebaseDatabase.instance
@@ -2467,7 +2670,7 @@ cancelReason(reason) async {
         'Content-Type': 'application/json',
       },
     );
-
+develper.log("cancel Reason ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       cancelReasonsList = jsonDecode(response.body)['data'];
       result = true;
@@ -2512,6 +2715,7 @@ userRating() async {
           'rating': review,
           'comment': feedback
         }));
+        develper.log("userRating ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getUserDetails();
       result = true;
@@ -2571,6 +2775,8 @@ addFavLocation(lat, lng, add, name) async {
           'pick_address': add,
           'address_name': name
         }));
+
+        develper.log("add Fav Location ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       result = true;
       await getUserDetails();
@@ -2600,6 +2806,7 @@ getSosData(lat, lng) async {
         'Content-Type': 'application/json'
       },
     );
+    develper.log("get SOS Data ${response.body}===${response.statusCode}");
 
     if (response.statusCode == 200) {
       sosData = jsonDecode(response.body)['data'];
@@ -2653,6 +2860,7 @@ getCurrentMessages() async {
         'Content-Type': 'application/json'
       },
     );
+    develper.log("get Current Message ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['success'] == true) {
         if (chatList.where((element) => element['from_type'] == 2).length !=
@@ -2685,6 +2893,8 @@ sendMessage(chat) async {
         },
         body:
             jsonEncode({'request_id': userRequestData['id'], 'message': chat}));
+
+            develper.log("sendMessage ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getCurrentMessages();
       FirebaseDatabase.instance
@@ -2709,6 +2919,7 @@ messageSeen() async {
         'Content-Type': 'application/json'
       },
       body: jsonEncode({'request_id': userRequestData['id']}));
+      develper.log("Message Seen ${response.body}===${response.statusCode}");
   if (response.statusCode == 200) {
     getCurrentMessages();
   } else {
@@ -2754,6 +2965,7 @@ deleteSos(id) async {
       'Authorization': 'Bearer ${bearerToken[0].token}',
       'Content-Type': 'application/json'
     });
+    develper.log("deleteSos ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getUserDetails();
       result = 'success';
@@ -2791,6 +3003,7 @@ getFaqData(lat, lng) async {
       'Authorization': 'Bearer ${bearerToken[0].token}',
       'Content-Type': 'application/json'
     });
+    develper.log("getFaqData ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       faqData = jsonDecode(response.body)['data'];
       valueNotifierBook.incrementNotifier();
@@ -2819,6 +3032,7 @@ removeFavAddress(id) async {
           'Authorization': 'Bearer ${bearerToken[0].token}',
           'Content-Type': 'application/json'
         });
+        develper.log("RemoveFavAddress ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getUserDetails();
       result = 'success';
@@ -2846,6 +3060,7 @@ getReferral() async {
       'Authorization': 'Bearer ${bearerToken[0].token}',
       'Content-Type': 'application/json'
     });
+    develper.log("get Referral ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       result = 'success';
       myReferralCode = jsonDecode(response.body)['data'];
@@ -2872,6 +3087,7 @@ userLogout() async {
       'Authorization': 'Bearer ${bearerToken[0].token}',
       'Content-Type': 'application/json'
     });
+    develper.log("UserLOgout  ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       pref.remove('Bearer');
 
@@ -2899,6 +3115,7 @@ getHistory(id) async {
   try {
     var response = await http.get(Uri.parse('${url}api/v1/request/history?$id'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("getHistory ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       // printWrapped(response.body);
       myHistory = jsonDecode(response.body)['data'];
@@ -2927,6 +3144,7 @@ getHistoryPages(id) async {
   try {
     var response = await http.get(Uri.parse('${url}api/v1/request/history?$id'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("get History Pages ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       List list = jsonDecode(response.body)['data'];
       // ignore: avoid_function_literals_in_foreach_calls
@@ -2964,6 +3182,7 @@ getWalletHistory() async {
     var response = await http.get(
         Uri.parse('${url}api/v1/payment/wallet/history'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("getWallet History ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       // printWrapped(response.body);
       walletBalance = jsonDecode(response.body);
@@ -2992,6 +3211,7 @@ getWalletHistoryPage(page) async {
     var response = await http.get(
         Uri.parse('${url}api/v1/payment/wallet/history?page=$page'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("getWallet History Page ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       walletBalance = jsonDecode(response.body);
       List list = walletBalance['wallet_history']['data'];
@@ -3025,6 +3245,7 @@ getClientToken() async {
     var response = await http.get(
         Uri.parse('${url}api/v1/payment/client/token'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("get Client token ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       result = 'success';
     } else {
@@ -3054,6 +3275,7 @@ getStripePayment(money) async {
               'Content-Type': 'application/json'
             },
             body: jsonEncode({'amount': money}));
+            develper.log("get Stripe Payment ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       results = 'success';
       stripeToken = jsonDecode(response.body)['data'];
@@ -3083,6 +3305,7 @@ addMoneyStripe(amount, nonce) async {
         },
         body: jsonEncode(
             {'amount': amount, 'payment_nonce': nonce, 'payment_id': nonce}));
+            develper.log("add Money Stripe ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getWalletHistory();
       await getUserDetails();
@@ -3113,6 +3336,7 @@ payMoneyStripe(nonce) async {
         },
         body: jsonEncode(
             {'request_id': userRequestData['id'], 'payment_id': nonce}));
+            develper.log("pay Money Stripe ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       result = 'success';
     } else {
@@ -3142,6 +3366,7 @@ getPaystackPayment(body) async {
               'Content-Type': 'application/json'
             },
             body: body);
+            develper.log("get Pay stack Payment ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['status'] == false) {
         results = jsonDecode(response.body)['message'];
@@ -3174,6 +3399,7 @@ addMoneyPaystack(amount, nonce) async {
         },
         body: jsonEncode(
             {'amount': amount, 'payment_nonce': nonce, 'payment_id': nonce}));
+            develper.log("add Money Pay Satck ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getWalletHistory();
       await getUserDetails();
@@ -3205,6 +3431,7 @@ addMoneyFlutterwave(amount, nonce) async {
         },
         body: jsonEncode(
             {'amount': amount, 'payment_nonce': nonce, 'payment_id': nonce}));
+            develper.log("add Mony FlutterWave ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getWalletHistory();
       await getUserDetails();
@@ -3235,6 +3462,7 @@ addMoneyRazorpay(amount, nonce) async {
         },
         body: jsonEncode(
             {'amount': amount, 'payment_nonce': nonce, 'payment_id': nonce}));
+            develper.log("paymentGateway ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       await getWalletHistory();
       await getUserDetails();
@@ -3268,6 +3496,7 @@ getCfToken(money, currency) async {
           'Content-Type': 'application/json'
         },
         body: jsonEncode({'order_amount': money, 'order_currency': currency}));
+        develper.log("getCF Token ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['status'] == 'OK') {
         cftToken = jsonDecode(response.body);
@@ -3310,6 +3539,8 @@ cashFreePaymentSuccess() async {
           'txTime': cfSuccessList['txTime'],
           'signature': cfSuccessList['signature']
         }));
+
+        develper.log("cash free Payment Success ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['success'] == true) {
         result = 'success';
@@ -3334,7 +3565,7 @@ cashFreePaymentSuccess() async {
 
 //edit user profile
 
-updateProfile(name, email) async {
+updateProfile(name, email ,imagePath) async {
   dynamic result;
   try {
     var response = http.MultipartRequest(
@@ -3344,14 +3575,22 @@ updateProfile(name, email) async {
     response.headers
         .addAll({'Authorization': 'Bearer ${bearerToken[0].token}'});
     response.files
-        .add(await http.MultipartFile.fromPath('profile_picture', imageFile));
+        .add(await http.MultipartFile.fromPath('profile_picture', imageFile!.path));
     response.fields['email'] = email;
     response.fields['name'] = name;
+    if (imagePath.isNotEmpty) {
+      response.files.add(await http.MultipartFile.fromPath(
+        "profile_picture",
+        imagePath,
+      ));
+    }
     var request = await response.send();
     var respon = await http.Response.fromStream(request);
     final val = jsonDecode(respon.body);
+    develper.log("update Profile ${request.statusCode}===${val}");
     if (request.statusCode == 200) {
       result = 'success';
+      develper.log("updateProfile ${result}===${respon.body} ${respon.statusCode}");
       if (val['success'] == true) {
         await getUserDetails();
       }
@@ -3389,6 +3628,7 @@ updateProfileWithoutImage(name, email) async {
     var request = await response.send();
     var respon = await http.Response.fromStream(request);
     final val = jsonDecode(respon.body);
+    develper.log("update Profile Without Image ${request.statusCode}===${request.stream}");
     if (request.statusCode == 200) {
       result = 'success';
       if (val['success'] == true) {
@@ -3430,6 +3670,7 @@ getGeneralComplaint(type) async {
       Uri.parse('${url}api/v1/common/complaint-titles?complaint_type=$type'),
       headers: {'Authorization': 'Bearer ${bearerToken[0].token}'},
     );
+    develper.log("get General complanint ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       generalComplaintList = jsonDecode(response.body)['data'];
       result = 'success';
@@ -3459,6 +3700,7 @@ makeGeneralComplaint() async {
               'complaint_title_id': generalComplaintList[complaintType]['id'],
               'description': complaintDesc,
             }));
+            develper.log("make General Complaint ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       result = 'success';
     } else {
@@ -3488,6 +3730,7 @@ makeRequestComplaint() async {
               'description': complaintDesc,
               'request_id': myHistory[selectedHistory]['id']
             }));
+            develper.log("make Rquest Complaint ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       result = 'success';
     } else {
@@ -3554,6 +3797,7 @@ streamRide() {
       getUserDetails();
     } else if (event.snapshot.key.toString() == 'message_by_driver') {
       getCurrentMessages();
+      develper.log("${event.snapshot.key}");
     } else if (event.snapshot.key.toString() == 'cancelled_by_driver') {
       requestCancelledByDriver = true;
       getUserDetails();
@@ -3583,6 +3827,7 @@ userDelete() async {
       'Authorization': 'Bearer ${bearerToken[0].token}',
       'Content-Type': 'application/json'
     });
+    develper.log("user Delete ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       pref.remove('Bearer');
 
@@ -3611,6 +3856,7 @@ getnotificationHistory() async {
     var response = await http.get(
         Uri.parse('${url}api/v1/notifications/get-notification'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("Get Notification History ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       notificationHistory = jsonDecode(response.body)['data'];
       notificationHistoryPage = jsonDecode(response.body)['meta'];
@@ -3639,6 +3885,7 @@ getNotificationPages(id) async {
     var response = await http.get(
         Uri.parse('${url}api/v1/notifications/get-notification?$id'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("getNotification Pages ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       List list = jsonDecode(response.body)['data'];
       // ignore: avoid_function_literals_in_foreach_calls
@@ -3672,6 +3919,7 @@ deleteNotification(id) async {
     var response = await http.get(
         Uri.parse('${url}api/v1/notifications/delete-notification/$id'),
         headers: {'Authorization': 'Bearer ${bearerToken[0].token}'});
+        develper.log("Delete Notification ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       // notificationHistory = jsonDecode(response.body)['data'];
       // notificationHistoryPage = jsonDecode(response.body)['meta'];
@@ -3703,6 +3951,7 @@ sharewalletfun({mobile, role, amount}) async {
           'Authorization': 'Bearer ${bearerToken[0].token}',
         },
         body: jsonEncode({'mobile': mobile, 'role': role, 'amount': amount}));
+        develper.log("Delete Notification ${response.body}===${response.statusCode}");
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['success'] == true) {
         result = 'success';
