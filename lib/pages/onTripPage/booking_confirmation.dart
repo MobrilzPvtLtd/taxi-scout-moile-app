@@ -3102,10 +3102,7 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                 ),
                                                 SizedBox(
                                                   width: media.width * 0.8,
-                                                  child: Text(
-                                                      languages[choosenLanguage]
-                                                          [
-                                                          'text_internal_server_error'],
+                                                  child: Text("${tripReqError.toString()}",
                                                       style: GoogleFonts.roboto(
                                                           fontSize:
                                                               media.width *

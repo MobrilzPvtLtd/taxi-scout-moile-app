@@ -11,6 +11,8 @@ import '../../translations/translation.dart';
 import '../../widgets/widgets.dart';
 import 'package:tagyourtaxi_driver/pages/onTripPage/map_page.dart';
 import '../signupPage/signup_screen.dart';
+import 'forgot_password.dart';
+import 'login_otp.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -165,6 +167,14 @@ class _LoginState extends State<Login> {
                         alignment: Alignment.center,
                         child: Button(
                           onTap: () async {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           LoginOtpScreen(
+                            //               email: _emailController
+                            //                   .text)),
+                            // );
                             if (_formKey.currentState!.validate()) {
                               setState(() {
                                 _errorMessage = null;
@@ -188,7 +198,7 @@ class _LoginState extends State<Login> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            LoginOtpScreen(
+                                            Login_otp(
                                                 email: _emailController
                                                     .text)),
                                   );
@@ -225,10 +235,10 @@ class _LoginState extends State<Login> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => const ForgotPassword()),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const ForgotPassword()),
+                              );
                             },
                             child: Text(
                               languages[choosenLanguage]

@@ -615,6 +615,7 @@ import 'package:tagyourtaxi_driver/pages/NavigatorPages/history.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/makecomplaint.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/referral.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/selectlanguage.dart';
+import 'package:tagyourtaxi_driver/pages/login/login.dart';
 
 import 'package:tagyourtaxi_driver/pages/onTripPage/map_page.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
@@ -1132,6 +1133,7 @@ class _NavDrawerState extends State<NavDrawer> {
               // ),
               InkWell(
                 onTap: () {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                   setState(() {
                     logout = true;
                   });
