@@ -462,8 +462,8 @@ registerUser({
   bearerToken.clear();
   dynamic result;
   try {
-    var token = await FirebaseMessaging.instance.getToken();
-    var fcm = token.toString();
+    // var token = await FirebaseMessaging.instance.getToken();
+    // var fcm = token.toString();
     final response =
         http.MultipartRequest('POST', Uri.parse('${url}api/v1/user/register'));
     response.headers.addAll({'Content-Type': 'application/json'});
@@ -478,7 +478,7 @@ registerUser({
       "email": email ?? "",
       "password": password ?? "",
       "password_confirmation": confPassword ?? "",
-      "device_token": fcm,
+      // "device_token": fcm,
       "country": countries[phcode]['dial_code'],
       "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
       'lang': choosenLanguage,
@@ -525,8 +525,8 @@ emailVerify({
   bearerToken.clear();
   dynamic result;
   try {
-    var token = await FirebaseMessaging.instance.getToken();
-    var fcm = token.toString();
+    // var token = await FirebaseMessaging.instance.getToken();
+    // var fcm = token.toString();
     var response = await http.post(Uri.parse('${url}api/v1/validate-email-otp'),
         headers: {
           'Content-Type': 'application/json',
@@ -534,7 +534,7 @@ emailVerify({
         body: jsonEncode({
           "email":email,
           "otp":otp,
-          "device_token": fcm,
+          // "device_token": fcm,
         }));
         develper.log("Email verify ${response.statusCode}===${response.body}");
     if (response.statusCode == 200) {

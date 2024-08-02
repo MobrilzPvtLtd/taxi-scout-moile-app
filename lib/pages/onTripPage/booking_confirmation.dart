@@ -4249,8 +4249,8 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                         height: media.width *
                                                                             0.03),
                                                                     Text(
-                                                                      userRequestData['driverDetail']['data']['car_color'] +
-                                                                          ' ' +
+                                                                      userRequestData['driverDetail']['data']['car_color'] ?? ""+
+                                                                          ' ' ?? ""+
                                                                           userRequestData['driverDetail']['data']
                                                                               [
                                                                               'car_make_name'] +

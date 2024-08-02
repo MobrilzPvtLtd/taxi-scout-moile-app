@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "128519286091",
-    "project_id": "taxiscout24-80c3c",
-    "storage_bucket": "taxiscout24-80c3c.appspot.com"
+    "project_number": "608657907803",
+    "project_id": "taxiscout24-2",
+    "storage_bucket": "taxiscout24-2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:128519286091:android:d069b74a89e02ae6fd8cce",
+        "mobilesdk_app_id": "1:608657907803:android:b82a19e044ae6fcb159f7e",
         "android_client_info": {
           "package_name": "com.taxiscout24"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCwWvYrOfMzs1Awx34oCcKyv7zn60YLqOE"
+          "current_key": "AIzaSyBQ4SeIo1ngE2QYBKhFTmG6QeKHMH5GDGQ"
         }
       ],
       "services": {
