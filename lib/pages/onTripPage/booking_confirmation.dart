@@ -1948,81 +1948,82 @@ class _BookingConfirmationState extends State<BookingConfirmation>
                                                                       true;
                                                                 });
                                                               },
-                                                              child: Row(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    width: media
-                                                                            .width *
-                                                                        0.06,
-                                                                    child: (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] ==
-                                                                            'cash')
-                                                                        ? Image
-                                                                            .asset(
-                                                                            'assets/images/cash.png',
-                                                                            fit:
-                                                                                BoxFit.contain,
-                                                                          )
-                                                                        : (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] ==
-                                                                                'wallet')
-                                                                            ? Image.asset(
-                                                                                'assets/images/wallet.png',
-                                                                                fit: BoxFit.contain,
-                                                                              )
-                                                                            : (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] == 'card')
-                                                                                ? Image.asset(
-                                                                                    'assets/images/card.png',
-                                                                                    fit: BoxFit.contain,
-                                                                                  )
-                                                                                : (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] == 'upi')
-                                                                                    ? Image.asset(
-                                                                                        'assets/images/upi.png',
-                                                                                        fit: BoxFit.contain,
-                                                                                      )
-                                                                                    : Container(),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: media
-                                                                            .width *
-                                                                        0.02,
-                                                                  ),
-                                                                  Text(
-                                                                    etaDetails[choosenVehicle]
-                                                                            [
-                                                                            'payment_type']
-                                                                        .toString()
-                                                                        .split(
-                                                                            ',')
-                                                                        .toList()[
-                                                                            payingVia]
-                                                                        .toString(),
-                                                                    style: GoogleFonts.roboto(
-                                                                        fontSize:
-                                                                            media.width *
-                                                                                fourteen,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        color:
-                                                                            buttonColor),
-                                                                  ),
-                                                                  Expanded(
-                                                                      child:
-                                                                          Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      Icon(
-                                                                          Icons
-                                                                              .arrow_forward_ios,
-                                                                          size: media.width *
-                                                                              0.05,
-                                                                          color:
-                                                                              buttonColor),
-                                                                    ],
-                                                                  ))
-                                                                ],
-                                                              ),
+                                                              child: Container(),
+                                                              // Row(
+                                                              //   children: [
+                                                              //     SizedBox(
+                                                              //       width: media
+                                                              //               .width *
+                                                              //           0.06,
+                                                              //       child: (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] ==
+                                                              //               'cash')
+                                                              //           ? Image
+                                                              //               .asset(
+                                                              //               'assets/images/cash.png',
+                                                              //               fit:
+                                                              //                   BoxFit.contain,
+                                                              //             )
+                                                              //           : (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] ==
+                                                              //                   'wallet')
+                                                              //               ? Image.asset(
+                                                              //                   'assets/images/wallet.png',
+                                                              //                   fit: BoxFit.contain,
+                                                              //                 )
+                                                              //               : (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] == 'card')
+                                                              //                   ? Image.asset(
+                                                              //                       'assets/images/card.png',
+                                                              //                       fit: BoxFit.contain,
+                                                              //                     )
+                                                              //                   : (etaDetails[choosenVehicle]['payment_type'].toString().split(',').toList()[payingVia] == 'upi')
+                                                              //                       ? Image.asset(
+                                                              //                           'assets/images/upi.png',
+                                                              //                           fit: BoxFit.contain,
+                                                              //                         )
+                                                              //                       : Container(),
+                                                              //     ),
+                                                              //     SizedBox(
+                                                              //       width: media
+                                                              //               .width *
+                                                              //           0.02,
+                                                              //     ),
+                                                              //     Text(
+                                                              //       etaDetails[choosenVehicle]
+                                                              //               [
+                                                              //               'payment_type']
+                                                              //           .toString()
+                                                              //           .split(
+                                                              //               ',')
+                                                              //           .toList()[
+                                                              //               payingVia]
+                                                              //           .toString(),
+                                                              //       style: GoogleFonts.roboto(
+                                                              //           fontSize:
+                                                              //               media.width *
+                                                              //                   fourteen,
+                                                              //           fontWeight:
+                                                              //               FontWeight
+                                                              //                   .w600,
+                                                              //           color:
+                                                              //               buttonColor),
+                                                              //     ),
+                                                              //     Expanded(
+                                                              //         child:
+                                                              //             Row(
+                                                              //       mainAxisAlignment:
+                                                              //           MainAxisAlignment
+                                                              //               .end,
+                                                              //       children: [
+                                                              //         Icon(
+                                                              //             Icons
+                                                              //                 .arrow_forward_ios,
+                                                              //             size: media.width *
+                                                              //                 0.05,
+                                                              //             color:
+                                                              //                 buttonColor),
+                                                              //       ],
+                                                              //     ))
+                                                              //   ],
+                                                              // ),
                                                             )
                                                           : (choosenVehicle !=
                                                                       null &&

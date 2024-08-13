@@ -253,11 +253,11 @@ class _MapsState extends State<Maps>
           addressList.add(AddressList(
               id: '1',
               type: 'pickup',
-              address: val,
+              address: val ?? "",
               latlng:
                   LatLng(_centerLocation.latitude, _centerLocation.longitude),
-              name: userDetails['name'],
-              number: userDetails['mobile']));
+              name: userDetails['name'] ?? "",
+              number: userDetails['mobile'] ?? ""));
         }
       });
       //remove in original

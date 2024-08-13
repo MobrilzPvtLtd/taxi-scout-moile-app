@@ -44,11 +44,11 @@ var audio = 'audio/notification_sound.mp3';
 bool internet = true;
 //   https://dumbadpo.appnexustech.in
 //base url
-String url = 'https://www.mobrilz.digital/admin/public/';
-
+// String url = 'https://www.mobrilz.digital/admin/public/';
+String url = 'https://admin.taxiscout24.com/';
 // 'https://www.mobrilz.digital/admin/public/';
 
-String mapkey = 'AIzaSyAhZQSz7cUgNdkv1V05EjT26V_UtKSH5y4';
+String mapkey = 'AIzaSyAkoUHR7pVN2oB0ZbRTXFICCqSzSmv3HUw';
 
 //check internet connection
 
@@ -625,7 +625,7 @@ loginemailVerify({
           "email":email,
           "otp":otp,
         }));
-    develper.log("Email verify ${response.statusCode}===${response.body}");
+
     if (response.statusCode == 200) {
       var jsonVal = jsonDecode(response.body);
       bearerToken.add(BearerClass(
