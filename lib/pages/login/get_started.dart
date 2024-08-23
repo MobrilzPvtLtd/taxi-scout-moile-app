@@ -2,16 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
-import 'package:tagyourtaxi_driver/pages/referralcode/referral_code.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import './login.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:image_picker/image_picker.dart';
+import '../vehicleInformations/service_area.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -22,13 +22,20 @@ class GetStarted extends StatefulWidget {
 
 String name = ''; //name of user
 String email = '';
-String password = "";// email of user
+String password = '';// email of user
 dynamic proImageFile1;
+//List<dynamic>
+dynamic specialities = [];
 
 class _GetStartedState extends State<GetStarted> {
   bool _loading = false;
   var verifyEmailError = '';
-  var _error = '';
+
+  TextEditingController emailText =
+      TextEditingController(); //email textediting controller
+  TextEditingController nameText =
+      TextEditingController(); //name textediting controller
+
   ImagePicker picker = ImagePicker();
   bool _pickImage = false;
   String _permission = '';
@@ -84,22 +91,30 @@ class _GetStartedState extends State<GetStarted> {
 
   //navigate
   navigate() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const Referral()),
-        (route) => false);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const ServiceArea()));
   }
-
-  TextEditingController emailText =
-      TextEditingController(); //email textediting controller
-  TextEditingController nameText =
-      TextEditingController(); //name textediting controller
 
   @override
   void initState() {
     proImageFile1 = null;
+    transportType = '';
     super.initState();
   }
+
+  // List<String> selectedValues = [];
+
+  // void selectValue(String value) {
+  //   setState(() {
+  //     if (selectedValues.contains(value)) {
+  //       selectedValues.remove(value);
+  //     } else {
+  //       selectedValues.add(value);
+  //     }
+  //   });
+  // }
+
+  List<String> allContainers = ['Smoking', 'Pets', 'Drinking', 'Handicap'];
 
   @override
   Widget build(BuildContext context) {
@@ -115,14 +130,18 @@ class _GetStartedState extends State<GetStarted> {
             children: [
               Container(
                 padding: EdgeInsets.only(
-                    left: media.width * 0.08, right: media.width * 0.08),
+                    left: media.width * 0.08,
+                    right: media.width * 0.08,
+                    top: media.width * 0.05 +
+                        MediaQuery.of(context).padding.top),
                 height: media.height * 1,
                 width: media.width * 1,
                 color: page,
                 child: Column(
                   children: [
                     Container(
-                        height: media.height * 0.12,
+
+                        // height: media.height * 0.12,
                         width: media.width * 1,
                         color: topBar,
                         child: Row(
@@ -145,12 +164,18 @@ class _GetStartedState extends State<GetStarted> {
                           ),
                           SizedBox(
                             width: media.width * 1,
-                            child: Text(
-                              languages[choosenLanguage]['text_get_started'],
-                              style: GoogleFonts.roboto(
-                                  fontSize: media.width * twentyeight,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  languages[choosenLanguage]
+                                      ['text_get_started'],
+                                  style: GoogleFonts.roboto(
+                                      fontSize: media.width * twentyeight,
+                                      fontWeight: FontWeight.bold,
+                                      color: textColor),
+                                ),
+                              ],
                             ),
                           ),
                           SizedBox(
@@ -201,7 +226,10 @@ class _GetStartedState extends State<GetStarted> {
                                     ),
                             ),
                           ),
+
                           SizedBox(height: media.height * 0.04),
+
+                          // name input field
                           InputField(
                             icon: Icons.person_outline_rounded,
                             text: languages[choosenLanguage]['text_name'],
@@ -215,6 +243,7 @@ class _GetStartedState extends State<GetStarted> {
                           SizedBox(
                             height: media.height * 0.012,
                           ),
+                          // email input field
                           InputField(
                             icon: Icons.email_outlined,
                             text: languages[choosenLanguage]['text_email'],
@@ -268,15 +297,440 @@ class _GetStartedState extends State<GetStarted> {
                               ],
                             ),
                           ),
-                          //email already exist error
-                          (_error != '')
+                          SizedBox(
+                            height: media.width * 0.05,
+                          ),
+                          SizedBox(
+                            width: media.width * 0.9,
+                            child: Text(
+                              'Register for',
+                              style: GoogleFonts.roboto(
+                                  fontSize: media.width * fourteen,
+                                  fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                            ),
+                          ),
+                          SizedBox(
+                            height: media.height * 0.012,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: media.width * 0.025,
+                                    right: media.width * 0.025),
+                                width: media.width * 0.25,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      transportType = 'taxi';
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: media.width * 0.05,
+                                        width: media.width * 0.05,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                width: 1.2)),
+                                        child: (transportType == 'taxi')
+                                            ? Center(
+                                                child: Icon(
+                                                Icons.done,
+                                                size: media.width * 0.04,
+                                              ))
+                                            : Container(),
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.025,
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.15,
+                                        child: Text(
+                                          'Taxi',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: media.width * fourteen,
+                                              fontWeight: FontWeight.w600),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: media.width * 0.025,
+                                    right: media.width * 0.025),
+                                width: media.width * 0.25,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      transportType = 'delivery';
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: media.width * 0.05,
+                                        width: media.width * 0.05,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                width: 1.2)),
+                                        child: (transportType == 'delivery')
+                                            ? Center(
+                                                child: Icon(
+                                                Icons.done,
+                                                size: media.width * 0.04,
+                                              ))
+                                            : Container(),
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.025,
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.15,
+                                        child: Text(
+                                          'Delivery',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: media.width * fourteen,
+                                              fontWeight: FontWeight.w600),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: media.width * 0.025,
+                                    right: media.width * 0.025),
+                                width: media.width * 0.25,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      transportType = 'both';
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: media.width * 0.05,
+                                        width: media.width * 0.05,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                width: 1.2)),
+                                        child: (transportType == 'both')
+                                            ? Center(
+                                                child: Icon(
+                                                Icons.done,
+                                                size: media.width * 0.04,
+                                              ))
+                                            : Container(),
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.025,
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.15,
+                                        child: Text(
+                                          'Both',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: media.width * fourteen,
+                                              fontWeight: FontWeight.w600),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: media.height * 0.020,
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: media.width * 0.025,
+                                    right: media.width * 0.025),
+                                width: media.width * 0.25,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      smokingType = 'Smoking';
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: media.width * 0.05,
+                                        width: media.width * 0.05,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                width: 1.2)),
+                                        child: (smokingType == 'Smoking')
+                                            ? Center(
+                                                child: Icon(
+                                                Icons.done,
+                                                size: media.width * 0.04,
+                                              ))
+                                            : Container(),
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.025,
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.15,
+                                        child: Text(
+                                          'Smoking',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: media.width * fourteen,
+                                              fontWeight: FontWeight.w600),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: media.width * 0.025,
+                                    right: media.width * 0.025),
+                                width: media.width * 0.25,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      petsType = 'Pets';
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: media.width * 0.05,
+                                        width: media.width * 0.05,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                width: 1.2)),
+                                        child: (petsType == 'Pets')
+                                            ? Center(
+                                                child: Icon(
+                                                Icons.done,
+                                                size: media.width * 0.04,
+                                              ))
+                                            : Container(),
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.025,
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.15,
+                                        child: Text(
+                                          'Pets',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: media.width * fourteen,
+                                              fontWeight: FontWeight.w600),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    top: media.width * 0.025,
+                                    right: media.width * 0.025),
+                                width: media.width * 0.25,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      drinkingType = 'Drinking';
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: media.width * 0.05,
+                                        width: media.width * 0.05,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                width: 1.2)),
+                                        child: (drinkingType == 'Drinking')
+                                            ? Center(
+                                                child: Icon(
+                                                Icons.done,
+                                                size: media.width * 0.04,
+                                              ))
+                                            : Container(),
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.025,
+                                      ),
+                                      SizedBox(
+                                        width: media.width * 0.15,
+                                        child: Text(
+                                          'Drinking',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: media.width * fourteen,
+                                              fontWeight: FontWeight.w600),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: media.width * 0.025,
+                                right: media.width * 0.025),
+                            width: media.width * 0.25,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  handicaType = 'Handicap';
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: media.width * 0.05,
+                                    width: media.width * 0.05,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.black, width: 1.2)),
+                                    child: (handicaType == 'Handicap')
+                                        ? Center(
+                                            child: Icon(
+                                            Icons.done,
+                                            size: media.width * 0.04,
+                                          ))
+                                        : Container(),
+                                  ),
+                                  SizedBox(
+                                    width: media.width * 0.025,
+                                  ),
+                                  SizedBox(
+                                    width: media.width * 0.15,
+                                    child: Text(
+                                      'Handicap',
+                                      style: GoogleFonts.roboto(
+                                          fontSize: media.width * fourteen,
+                                          fontWeight: FontWeight.w600),
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          // Column(
+                          //   crossAxisAlignment: CrossAxisAlignment.stretch,
+                          //   children: allContainers.map((container) {
+                          //     bool isSelected =
+                          //         specialities.contains(container);
+                          //     return GestureDetector(
+                          //       onTap: () {
+                          //         setState(() {
+                          //           if (isSelected) {
+                          //             specialities.remove(container);
+                          //           } else {
+                          //             specialities.add(container);
+                          //             print(
+                          //                 'selectedd value $specialities');
+                          //           }
+                          //         });
+                          //       },
+                          //       child: Container(
+                          //         margin: EdgeInsets.only(
+                          //             top: media.width * 0.025,
+                          //             right: media.width * 0.025),
+                          //         width: media.width * 0.25,
+                          //         child: Row(
+                          //           children: [
+                          //             Container(
+                          //               height: media.width * 0.05,
+                          //               width: media.width * 0.05,
+                          //               decoration: BoxDecoration(
+                          //                   border: Border.all(
+                          //                       color: Colors.black,
+                          //                       width: 1.2)),
+                          //               child: isSelected
+                          //                   // (transportType == 'Pets')
+                          //                   ? Center(
+                          //                       child: Icon(
+                          //                       Icons.done,
+                          //                       size: media.width * 0.04,
+                          //                     ))
+                          //                   : Container(),
+                          //             ),
+                          //             SizedBox(
+                          //               width: media.width * 0.010,
+                          //             ),
+                          //             SizedBox(
+                          //               width: media.width * 0.15,
+                          //               child: Text(
+                          //                 container,
+                          //                 style: GoogleFonts.roboto(
+                          //                     fontSize: media.width * fourteen,
+                          //                     fontWeight: FontWeight.w600),
+                          //                 maxLines: 1,
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+
+                          //       //  Container(
+                          //       //   height: media.width * 0.05,
+                          //       //   width: media.width * 0.05,
+                          //       //   decoration: BoxDecoration(
+                          //       //     border: Border.all(color: Colors.black),
+                          //       //     color:
+                          //       //         isSelected ? Colors.blue : Colors.white,
+                          //       //   ),
+                          //       //   child: Row(
+                          //       //     mainAxisAlignment:
+                          //       //         MainAxisAlignment.spaceBetween,
+                          //       //     children: [
+                          //       //       Text(container),
+                          //       //       isSelected
+                          //       //           ? Icon(Icons.check)
+                          //       //           : SizedBox(),
+                          //       //     ],
+                          //       //   ),
+                          //       // ),
+                          //     );
+                          //   }).toList(),
+                          // ),
+
+                          (verifyEmailError != '')
                               ? Container(
-                                  width: media.width * 0.8,
                                   margin:
                                       EdgeInsets.only(top: media.height * 0.03),
                                   alignment: Alignment.center,
+                                  width: media.width * 0.8,
                                   child: Text(
-                                    _error,
+                                    verifyEmailError,
                                     style: GoogleFonts.roboto(
                                         fontSize: media.width * sixteen,
                                         color: Colors.red),
@@ -288,58 +742,45 @@ class _GetStartedState extends State<GetStarted> {
                             height: media.height * 0.065,
                           ),
                           (nameText.text.isNotEmpty &&
-                                  emailText.text.isNotEmpty)
+                                  emailText.text.isNotEmpty &&
+                                  transportType != '')
                               ? Container(
                                   width: media.width * 1,
                                   alignment: Alignment.center,
                                   child: Button(
                                       onTap: () async {
                                         String pattern =
-                                            r"^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])*$";
+                                            r"^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])*$";
                                         RegExp regex = RegExp(pattern);
                                         if (regex.hasMatch(emailText.text)) {
                                           FocusManager.instance.primaryFocus
                                               ?.unfocus();
-
                                           setState(() {
                                             verifyEmailError = '';
-                                            _error = '';
                                             _loading = true;
                                           });
-                                          //validate email already exist
-                                          var result = await validateEmail();
-
+                                          var result =
+                                              await validateEmail(email);
+                                          setState(() {
+                                            _loading = false;
+                                          });
                                           if (result == 'success') {
                                             setState(() {
                                               verifyEmailError = '';
-                                              _error = '';
                                             });
-                                            var register = await registerUser();
-                                            if (register == null) {
-                                              //referral page
-                                              navigate();
-                                            } else {
-                                              setState(() {
-                                                _error = register.toString();
-                                              });
-                                            }
+                                            navigate();
                                           } else {
                                             setState(() {
                                               verifyEmailError =
                                                   result.toString();
-                                              _error = result.toString();
                                             });
+                                            debugPrint('failed');
                                           }
-                                          setState(() {
-                                            _loading = false;
-                                          });
                                         } else {
                                           setState(() {
                                             verifyEmailError =
                                                 languages[choosenLanguage]
                                                     ['text_email_validation'];
-                                            _error = languages[choosenLanguage]
-                                                ['text_email_validation'];
                                           });
                                         }
                                       },
@@ -352,6 +793,8 @@ class _GetStartedState extends State<GetStarted> {
                   ],
                 ),
               ),
+
+              //image pick
 
               (_pickImage == true)
                   ? Positioned(

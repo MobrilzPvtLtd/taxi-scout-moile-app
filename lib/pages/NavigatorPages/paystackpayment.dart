@@ -1,21 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-// import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/walletpage.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-// ignore: must_be_immutable
 class PayStackPage extends StatefulWidget {
-  dynamic from;
-  PayStackPage({this.from, Key? key}) : super(key: key);
+  const PayStackPage({Key? key}) : super(key: key);
 
   @override
   State<PayStackPage> createState() => _PayStackPageState();
@@ -32,16 +28,10 @@ class _PayStackPageState extends State<PayStackPage> {
     super.initState();
   }
 
-//payment gateway code
-
+// //payment gateway code
   payMoney() async {
-    dynamic val;
-    if (widget.from == '1') {
-      val = await getPaystackPayment(jsonEncode(
-          {'amount': addMoney * 100, 'payment_for': userRequestData['id']}));
-    } else {
-      val = await getPaystackPayment(jsonEncode({'amount': addMoney * 100}));
-    }
+    var val = await getPaystackPayment(addMoney * 100);
+//
     if (val != 'success') {
       _error = val.toString();
     }
@@ -167,7 +157,7 @@ class _PayStackPageState extends State<PayStackPage> {
                             ))
                         : Container(),
 
-                    //success
+                    //success payment
                     (_success == true)
                         ? Positioned(
                             top: 0,

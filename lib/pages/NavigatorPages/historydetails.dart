@@ -4,7 +4,7 @@ import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/history.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/makecomplaint.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
 class HistoryDetails extends StatefulWidget {
@@ -40,6 +40,7 @@ class _HistoryDetailsState extends State<HistoryDetails> {
           height: media.height * 1,
           width: media.width * 1,
           color: page,
+          //history details
           child: Column(
             children: [
               Stack(
@@ -66,8 +67,6 @@ class _HistoryDetailsState extends State<HistoryDetails> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-
-                  //history details
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -379,6 +378,25 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                       SizedBox(
                         height: media.width * 0.04,
                       ),
+                      (userDetails['role'] == 'owner')
+                          ? Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                        languages[choosenLanguage]['text_user'],
+                                        style: GoogleFonts.roboto(
+                                            fontSize: media.width * fourteen,
+                                            fontWeight: FontWeight.bold,
+                                            color: textColor))
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: media.width * 0.04,
+                                ),
+                              ],
+                            )
+                          : Container(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -389,16 +407,15 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                        myHistory[selectedHistory]
-                                                ['driverDetail']['data']
-                                            ['profile_picture']),
+                                        myHistory[selectedHistory]['userDetail']
+                                            ['data']['profile_picture']),
                                     fit: BoxFit.cover)),
                           ),
                           SizedBox(
                             width: media.width * 0.05,
                           ),
                           Text(
-                            myHistory[selectedHistory]['driverDetail']['data']
+                            myHistory[selectedHistory]['userDetail']['data']
                                 ['name'],
                             style: GoogleFonts.roboto(
                               fontSize: media.width * eighteen,
@@ -409,7 +426,7 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                myHistory[selectedHistory]['ride_user_rating']
+                                myHistory[selectedHistory]['ride_driver_rating']
                                     .toString(),
                                 style: GoogleFonts.roboto(
                                     fontSize: media.width * eighteen,
@@ -424,6 +441,80 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                           ))
                         ],
                       ),
+                      (userDetails['role'] == 'owner')
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height: media.width * 0.04,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                        languages[choosenLanguage]
+                                            ['text_driver'],
+                                        style: GoogleFonts.roboto(
+                                            fontSize: media.width * fourteen,
+                                            fontWeight: FontWeight.bold,
+                                            color: textColor))
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: media.width * 0.04,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: media.width * 0.13,
+                                      width: media.width * 0.13,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  myHistory[selectedHistory]
+                                                              ['driverDetail']
+                                                          ['data']
+                                                      ['profile_picture']),
+                                              fit: BoxFit.cover)),
+                                    ),
+                                    SizedBox(
+                                      width: media.width * 0.05,
+                                    ),
+                                    Text(
+                                      myHistory[selectedHistory]['driverDetail']
+                                          ['data']['name'],
+                                      style: GoogleFonts.roboto(
+                                        fontSize: media.width * eighteen,
+                                      ),
+                                    ),
+                                    Expanded(
+                                        child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          myHistory[selectedHistory]
+                                                      ['ride_user_rating'] !=
+                                                  null
+                                              ? myHistory[selectedHistory]
+                                                      ['ride_user_rating']
+                                                  .toString()
+                                              : '-',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: media.width * eighteen,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Icon(
+                                          Icons.star,
+                                          size: media.width * twenty,
+                                          color: buttonColor,
+                                        )
+                                      ],
+                                    ))
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Container(),
                       SizedBox(
                         height: media.height * 0.05,
                       ),
@@ -471,10 +562,8 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                                       (myHistory[selectedHistory]
                                                   ['is_rental'] ==
                                               false)
-                                          ? languages[choosenLanguage]
-                                              ['text_regular']
-                                          : languages[choosenLanguage]
-                                              ['text_rental'],
+                                          ? 'Regular'
+                                          : 'Rental',
                                       style: GoogleFonts.roboto(
                                           fontSize: media.width * fourteen,
                                           color: textColor),
@@ -565,32 +654,6 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                       SizedBox(
                         height: media.height * 0.05,
                       ),
-                      (myHistory[selectedHistory]['is_rental'] == true)
-                          ? Container(
-                              padding:
-                                  EdgeInsets.only(bottom: media.width * 0.05),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    languages[choosenLanguage]
-                                        ['text_ride_type'],
-                                    style: GoogleFonts.roboto(
-                                        fontSize: media.width * fourteen,
-                                        color: textColor),
-                                  ),
-                                  Text(
-                                    myHistory[selectedHistory]
-                                        ['rental_package_name'],
-                                    style: GoogleFonts.roboto(
-                                        fontSize: media.width * fourteen,
-                                        color: textColor),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -613,7 +676,6 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                           ),
                         ],
                       ),
-
                       SizedBox(
                         height: media.height * 0.02,
                       ),
@@ -739,7 +801,7 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            languages[choosenLanguage]['text_waiting_time_1'] +
+                            languages[choosenLanguage]['text_waiting_price'] +
                                 ' (' +
                                 myHistory[selectedHistory]['requestBill']
                                     ['data']['requested_currency_symbol'] +
@@ -893,7 +955,6 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                         height: 1.5,
                         color: const Color(0xffE0E0E0),
                       ),
-                      // SizedBox(height: media.height*0.02,),
                       SizedBox(
                         height: media.height * 0.05,
                       ),
@@ -930,7 +991,7 @@ class _HistoryDetailsState extends State<HistoryDetails> {
                 ),
               ),
 
-              //make complaint button
+              //make complaints
               Container(
                 padding: EdgeInsets.all(media.width * 0.05),
                 child: Button(

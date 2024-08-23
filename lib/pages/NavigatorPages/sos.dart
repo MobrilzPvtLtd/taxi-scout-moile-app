@@ -3,8 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/pickcontacts.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
+import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
 class Sos extends StatefulWidget {
@@ -24,12 +25,12 @@ class _SosState extends State<Sos> {
     var media = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context, true);
+        Navigator.pop(context, false);
         return true;
       },
       child: Material(
         child: ValueListenableBuilder(
-            valueListenable: valueNotifierBook.value,
+            valueListenable: valueNotifierHome.value,
             builder: (context, value, child) {
               return Directionality(
                 textDirection: (languageDirection == 'rtl')
@@ -66,7 +67,7 @@ class _SosState extends State<Sos> {
                               Positioned(
                                   child: InkWell(
                                       onTap: () {
-                                        Navigator.pop(context, true);
+                                        Navigator.pop(context, false);
                                       },
                                       child: const Icon(Icons.arrow_back)))
                             ],
@@ -147,22 +148,17 @@ class _SosState extends State<Sos> {
                                                                       CrossAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    SizedBox(
-                                                                      width: media
-                                                                              .width *
-                                                                          0.7,
-                                                                      child:
-                                                                          Text(
-                                                                        sosData[i]
-                                                                            [
-                                                                            'name'],
-                                                                        style: GoogleFonts.roboto(
-                                                                            fontSize: media.width *
-                                                                                sixteen,
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                            color: textColor),
-                                                                      ),
+                                                                    Text(
+                                                                      sosData[i]
+                                                                          [
+                                                                          'name'],
+                                                                      style: GoogleFonts.roboto(
+                                                                          fontSize: media.width *
+                                                                              sixteen,
+                                                                          fontWeight: FontWeight
+                                                                              .w600,
+                                                                          color:
+                                                                              textColor),
                                                                     ),
                                                                     SizedBox(
                                                                       height: media
@@ -214,28 +210,30 @@ class _SosState extends State<Sos> {
                               ),
                             ),
                           ),
-
-                          //add sos button
                           (sosData
                                       .where((element) =>
                                           element['user_type'] != 'admin')
                                       .length <
-                                  5)
+                                  4)
                               ? Container(
                                   padding: EdgeInsets.only(
                                       top: media.width * 0.05,
                                       bottom: media.width * 0.05),
                                   child: Button(
                                       onTap: () async {
+                                        //pick contact
+                                        // setState(() {
+                                        //   _isLoading = true;
+                                        // });
                                         var nav = await Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PickContact(
-                                                      from: 2,
-                                                    )));
+                                                    const PickContact()));
                                         if (nav) {
-                                          setState(() {});
+                                          setState(() {
+                                            // _isLoading = false;
+                                          });
                                         }
                                       },
                                       text: languages[choosenLanguage]
@@ -324,6 +322,18 @@ class _SosState extends State<Sos> {
                               ),
                             ),
                           )
+                        : Container(),
+                    //no internet
+                    (internet == false)
+                        ? Positioned(
+                            top: 0,
+                            child: NoInternet(
+                              onTap: () {
+                                setState(() {
+                                  internetTrue();
+                                });
+                              },
+                            ))
                         : Container(),
 
                     //loader

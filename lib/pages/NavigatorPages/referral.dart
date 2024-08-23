@@ -8,7 +8,7 @@ import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import 'package:share_plus/share_plus.dart';
 import '../loadingPage/loadingpage.dart';
@@ -31,6 +31,9 @@ class _ReferralPageState extends State<ReferralPage> {
     super.initState();
   }
 
+  String androidPackage = '';
+  String iOSBundle = '';
+
 //get referral code
   _getReferral() async {
     await getReferral();
@@ -44,18 +47,18 @@ class _ReferralPageState extends State<ReferralPage> {
 
   var android = '';
   var ios = '';
-  String androidPackage = '';
-  String iOSBundle = '';
 
   getUrls() async {
-    var packageName =
-        await FirebaseDatabase.instance.ref().child('user_package_name').get();
+    var packageName = await FirebaseDatabase.instance
+        .ref()
+        .child('driver_package_name')
+        .get();
     if (packageName.value != null) {
       androidPackage = packageName.value.toString();
       android = 'https://play.google.com/store/apps/details?id=$androidPackage';
     }
     var bundleId =
-        await FirebaseDatabase.instance.ref().child('user_bundle_id').get();
+        await FirebaseDatabase.instance.ref().child('driver_bundle_id').get();
     if (bundleId.value != null) {
       iOSBundle = bundleId.value.toString();
       var response = await http
@@ -69,7 +72,7 @@ class _ReferralPageState extends State<ReferralPage> {
     }
   }
 
-//show toast for copied
+//show toast for copy
   showToast() {
     setState(() {
       _showToast = true;
@@ -128,6 +131,7 @@ class _ReferralPageState extends State<ReferralPage> {
                                         Positioned(
                                             child: InkWell(
                                                 onTap: () {
+                                                  // print(myReferralCode);
                                                   Navigator.pop(context);
                                                 },
                                                 child: const Icon(
@@ -188,6 +192,7 @@ class _ReferralPageState extends State<ReferralPage> {
                                                         text: myReferralCode[
                                                             'refferal_code']));
                                                   });
+                                                  //show toast for copy
                                                   showToast();
                                                 },
                                                 child: const Icon(Icons.copy))

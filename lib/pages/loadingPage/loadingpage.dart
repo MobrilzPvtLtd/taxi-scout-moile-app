@@ -2,19 +2,23 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
-import 'package:tagyourtaxi_driver/pages/onTripPage/booking_confirmation.dart';
-import 'package:tagyourtaxi_driver/pages/onTripPage/invoice.dart';
-import 'package:tagyourtaxi_driver/pages/language/languages.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:tagyourtaxi_driver/pages/login/login.dart';
+import 'package:tagyourtaxi_driver/pages/language/languages.dart';
+import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
+import 'package:tagyourtaxi_driver/pages/login/start_screen.dart';
 import 'package:tagyourtaxi_driver/pages/onTripPage/map_page.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
+import 'package:tagyourtaxi_driver/pages/vehicleInformations/docs_onprocess.dart';
+import 'package:tagyourtaxi_driver/pages/vehicleInformations/upload_docs.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import '../../styles/styles.dart';
 import '../../functions/functions.dart';
 import 'package:http/http.dart' as http;
+
+import '../login/login.dart';
+import '../login/signupmethod.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({Key? key}) : super(key: key);
@@ -28,9 +32,32 @@ dynamic package;
 class _LoadingPageState extends State<LoadingPage> {
   String dot = '.';
   bool updateAvailable = false;
-
   dynamic _version;
   bool _isLoading = false;
+
+  var demopage = TextEditingController();
+
+  //navigate
+  navigate() {
+    // if (userDetails['uploaded_document'] == false) {
+    //   Navigator.pushReplacement(
+    //       context, MaterialPageRoute(builder: (context) => Docs()));
+    // } else if (userDetails['uploaded_document'] == true &&
+    //     userDetails['approve'] == false) {
+    //   Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => const DocsProcess(),
+    //       ));
+    // } else if (userDetails['uploaded_document'] == true &&
+    //     userDetails['approve'] == true) {
+      //status approved
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Maps()),
+          (route) => false);
+    }
+
 
   @override
   void initState() {
@@ -39,52 +66,22 @@ class _LoadingPageState extends State<LoadingPage> {
     super.initState();
   }
 
-  //navigate
-  navigate() {
-    if (userRequestData.isNotEmpty && userRequestData['is_completed'] == 1) {
-      //invoice page of ride
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Invoice()),
-          (route) => false);
-    } else if (userRequestData.isNotEmpty &&
-        userRequestData['is_completed'] != 1) {
-      //searching ride page
-      if (userRequestData['is_rental'] == true) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BookingConfirmation(
-                      type: 1,
-                    )),
-            (route) => false);
-      } else {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => BookingConfirmation()),
-            (route) => false);
-      }
-    } else {
-      //home page
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Maps()),
-          (route) => false);
-    }
-  }
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
 //get language json and data saved in local (bearer token , choosen language) and find users current status
   getLanguageDone() async {
     package = await PackageInfo.fromPlatform();
-
     if (platform == TargetPlatform.android) {
       _version = await FirebaseDatabase.instance
           .ref()
-          .child('user_android_version')
+          .child('driver_android_version')
           .get();
     } else {
-      _version =
-          await FirebaseDatabase.instance.ref().child('user_ios_version').get();
+      _version = await FirebaseDatabase.instance
+          .ref()
+          .child('driver_ios_version')
+          .get();
     }
     if (_version.value != null) {
       var version = _version.value.toString().split('.');
@@ -122,17 +119,19 @@ class _LoadingPageState extends State<LoadingPage> {
       if (internet == true) {
         var val = await getLocalData();
 
+        //if user is login and check waiting for approval status and send accordingly
         if (val == '3') {
           navigate();
-        } else if (val == '2') {
+        }
+        //if user is not login in this device
+        else if (val == '2') {
           Future.delayed(const Duration(seconds: 2), () {
-            //login page
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Login()));
+                MaterialPageRoute(builder: (context) => const StartScreen()));
           });
         } else {
+          //user installing first time and didnt yet choosen language
           Future.delayed(const Duration(seconds: 2), () {
-            //choose language page
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const Languages()));
           });
@@ -154,21 +153,22 @@ class _LoadingPageState extends State<LoadingPage> {
             Container(
               height: media.height * 1,
               width: media.width * 1,
-              // decoration:  BoxDecoration(
-              //   color: yellowcolor
-              //   //.withOpacity(0.5)
-              //   //Color(0xffE70000),
-              // ),
+
+              // decoration: BoxDecoration(
+              //        color: yellowcolor.withOpacity(0.9)
+              //   //color: buttonColor4`  q1wio 7
+              //     // Color(0xffF7F7F7),
+              //     ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     padding: EdgeInsets.all(media.width * 0.01),
                     width: media.width * 0.700,
-                    height: media.width * 0.800,
+                    height: media.width * 0.700,
                     decoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('assets/images/logo.png'),
+                            image: AssetImage('assets/images/taxi.png'),
                             fit: BoxFit.contain)),
                   ),
                 ],
@@ -223,8 +223,6 @@ class _LoadingPageState extends State<LoadingPage> {
                                             openBrowser(jsonDecode(
                                                     response.body)['results'][0]
                                                 ['trackViewUrl']);
-
-                                            // printWrapped(jsonDecode(response.body)['results'][0]['trackViewUrl']);
                                           }
 
                                           setState(() {
@@ -245,12 +243,13 @@ class _LoadingPageState extends State<LoadingPage> {
                 ? const Positioned(top: 0, child: Loading())
                 : Container(),
 
-            //no internet
+            //internet is not connected
             (internet == false)
                 ? Positioned(
                     top: 0,
                     child: NoInternet(
                       onTap: () {
+                        //try again
                         setState(() {
                           internetTrue();
                           getLanguageDone();

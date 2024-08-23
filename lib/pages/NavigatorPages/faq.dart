@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:location/location.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/pages/onTripPage/map_page.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 
 class Faq extends StatefulWidget {
   const Faq({Key? key}) : super(key: key);
@@ -17,8 +16,8 @@ class Faq extends StatefulWidget {
 
 class _FaqState extends State<Faq> {
   bool _faqCompleted = false;
-  bool _isLoading = true;
   dynamic _selectedQuestion;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -26,18 +25,14 @@ class _FaqState extends State<Faq> {
     super.initState();
   }
 
-//get faq data
+//get faq datas
+
   faqDatas() async {
-    if (currentLocation != null) {
-      await getFaqData(currentLocation.latitude, currentLocation.longitude);
-    } else {
-      var loc = await Location.instance.getLocation();
-      await getFaqData(loc.latitude, loc.longitude);
-    }
+    await getFaqData(center.latitude, center.longitude);
     if (mounted) {
       setState(() {
-        _faqCompleted = true;
         _isLoading = false;
+        _faqCompleted = true;
       });
     }
   }
@@ -47,7 +42,7 @@ class _FaqState extends State<Faq> {
     var media = MediaQuery.of(context).size;
     return Material(
       child: ValueListenableBuilder(
-          valueListenable: valueNotifierBook.value,
+          valueListenable: valueNotifierHome.value,
           builder: (context, value, child) {
             return Directionality(
               textDirection: (languageDirection == 'rtl')
@@ -180,6 +175,7 @@ class _FaqState extends State<Faq> {
                                                             const Duration(
                                                                 milliseconds:
                                                                     200),
+                                                        // padding: EdgeInsets.only(top: media.width*0.025),
                                                         child: (_selectedQuestion ==
                                                                 i)
                                                             ? Container(
@@ -238,7 +234,6 @@ class _FaqState extends State<Faq> {
                             },
                           ))
                       : Container(),
-
                   //loader
                   (_isLoading == true)
                       ? const Positioned(top: 0, child: Loading())

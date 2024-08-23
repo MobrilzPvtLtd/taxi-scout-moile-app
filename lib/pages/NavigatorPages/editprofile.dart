@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
@@ -7,7 +5,7 @@ import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
@@ -19,19 +17,18 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
-File? imageFile;
-// dynamic imagestore;
+dynamic proImageFile;
 
 class _EditProfileState extends State<EditProfile> {
   ImagePicker picker = ImagePicker();
   bool _isLoading = false;
   String _error = '';
-  String _permission = '';
   bool _pickImage = false;
+  String _permission = '';
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
 
-//gallery permission
+//get gallery permission
   getGalleryPermission() async {
     var status = await Permission.photos.status;
     if (status != PermissionStatus.granted) {
@@ -40,7 +37,7 @@ class _EditProfileState extends State<EditProfile> {
     return status;
   }
 
-//camera permission
+//get camera permission
   getCameraPermission() async {
     var status = await Permission.camera.status;
     if (status != PermissionStatus.granted) {
@@ -55,8 +52,7 @@ class _EditProfileState extends State<EditProfile> {
     if (permission == PermissionStatus.granted) {
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       setState(() {
-        imageFile = File(pickedFile!.path);
-        imageFile = File(pickedFile.path);
+        proImageFile = pickedFile?.path;
         _pickImage = false;
       });
     } else {
@@ -72,8 +68,7 @@ class _EditProfileState extends State<EditProfile> {
     if (permission == PermissionStatus.granted) {
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
       setState(() {
-        imageFile = File(pickedFile!.path);
-        imageFile = File(pickedFile.path);
+        proImageFile = pickedFile?.path;
         _pickImage = false;
       });
     } else {
@@ -83,30 +78,19 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  //navigate pop
+  @override
+  void initState() {
+    _error = '';
+    proImageFile = null;
+    name.text = userDetails['name'];
+    email.text = userDetails['email'];
+    super.initState();
+  }
+
   pop() {
     Navigator.pop(context, true);
   }
 
-  @override
-  void initState() {
-    _error = '';
-    imagefunctionforinitstate();
-    name.text = userDetails['name']?? "";
-    email.text = userDetails['email']?? "";
-    super.initState();
-  }
-void imagefunctionforinitstate(){
-    setState(() {
-      String? profile_pictureUrl = userDetails["profile_picture"];
-      if(profile_pictureUrl != null && profile_pictureUrl.isNotEmpty){
-        imageFile = File(profile_pictureUrl);
-      } else{
-        imageFile = null;
-        log("in imagefunctionforinitstate function something error ");
-      }
-    });
-}
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -136,7 +120,6 @@ void imagefunctionforinitstate(){
                               width: media.width * 1,
                               alignment: Alignment.center,
                               child: Text(
-                                // 'Edit Profile',
                                 languages[choosenLanguage]['text_editprofile'],
                                 style: GoogleFonts.roboto(
                                     fontSize: media.width * twenty,
@@ -147,7 +130,7 @@ void imagefunctionforinitstate(){
                             Positioned(
                                 child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      Navigator.pop(context, true);
                                     },
                                     child: const Icon(Icons.arrow_back)))
                           ],
@@ -159,16 +142,14 @@ void imagefunctionforinitstate(){
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: page,
-                              image: (imageFile == null)
+                              image: (proImageFile == null)
                                   ? DecorationImage(
                                       image: NetworkImage(
-                                        userDetails['profile_picture'] == null
-                                            ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu3_qIHtXBZ7vZeMQhyD8qLC1VRB9ImHadL09KET_iSQEX6ags4ICknfmqEKz8Nf6IOsA&usqp=CAU'
-                                            : userDetails['profile_picture'],
+                                        userDetails['profile_picture'],
                                       ),
                                       fit: BoxFit.cover)
                                   : DecorationImage(
-                                      image: FileImage(File(imageFile!.path)),
+                                      image: FileImage(File(proImageFile)),
                                       fit: BoxFit.cover)),
                         ),
                         SizedBox(
@@ -189,6 +170,7 @@ void imagefunctionforinitstate(){
                         SizedBox(
                           height: media.width * 0.1,
                         ),
+                        //edit name
                         SizedBox(
                           width: media.width * 0.8,
                           child: TextField(
@@ -210,6 +192,7 @@ void imagefunctionforinitstate(){
                         SizedBox(
                           height: media.width * 0.1,
                         ),
+                        //edit email
                         SizedBox(
                           width: media.width * 0.8,
                           child: TextField(
@@ -244,14 +227,12 @@ void imagefunctionforinitstate(){
                               });
                               dynamic val;
 
-                              if (imageFile == null) {
-                                //update name or email
+                              if (proImageFile == null) {
                                 val = await updateProfileWithoutImage(
                                     name.text, email.text);
                               } else {
-                                //update image
                                 val =
-                                    await updateProfile(name.text, email.text,imageFile?.path.toString());
+                                    await updateProfile(name.text, email.text);
                               }
                               if (val == 'success') {
                                 pop();
@@ -275,7 +256,7 @@ void imagefunctionforinitstate(){
               ),
             ),
 
-            //pick image bar
+            //pick image popup
             (_pickImage == true)
                 ? Positioned(
                     bottom: 0,
@@ -399,7 +380,7 @@ void imagefunctionforinitstate(){
                     ))
                 : Container(),
 
-            //popup for denied permission
+            //permission denied popup
             (_permission != '')
                 ? Positioned(
                     child: Container(
@@ -504,18 +485,6 @@ void imagefunctionforinitstate(){
                     ),
                   ))
                 : Container(),
-            (internet == false)
-                ? Positioned(
-                    top: 0,
-                    child: NoInternet(
-                      onTap: () {
-                        setState(() {
-                          internetTrue();
-                        });
-                      },
-                    ))
-                : Container(),
-
             //loader
             (_isLoading == true)
                 ? const Positioned(top: 0, child: Loading())
@@ -539,13 +508,16 @@ void imagefunctionforinitstate(){
                               color: page),
                           child: Column(
                             children: [
-                              Text(
-                                _error.toString(),
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.roboto(
-                                    fontSize: media.width * sixteen,
-                                    color: textColor,
-                                    fontWeight: FontWeight.w600),
+                              SizedBox(
+                                width: media.width * 0.8,
+                                child: Text(
+                                  _error.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.roboto(
+                                      fontSize: media.width * sixteen,
+                                      color: textColor,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                               SizedBox(
                                 height: media.width * 0.05,
@@ -563,6 +535,19 @@ void imagefunctionforinitstate(){
                       ],
                     ),
                   ))
+                : Container(),
+
+            //no internet
+            (internet == false)
+                ? Positioned(
+                    top: 0,
+                    child: NoInternet(
+                      onTap: () {
+                        setState(() {
+                          internetTrue();
+                        });
+                      },
+                    ))
                 : Container(),
           ],
         ),

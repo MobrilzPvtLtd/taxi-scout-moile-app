@@ -17,21 +17,18 @@ enum Direction {
 
 /// A class that can convert a geohash String to [Longitude, Latitude] and back.
 class GeoHasher {
-  // ignore: prefer_const_declarations
-  static final String _baseSequence = '0123456789bcdefghjkmnpqrstuvwxyz';
-
-  ///AIzaSyBkkm67QjmV5HoB2HMiwtyL4Xd1lHGEtt0
+  static const String baseSequence = '0123456789bcdefghjkmnpqrstuvwxyz';
 
   /// Creates a Map of available characters for a geohash
   final _base32Map = <String, int>{
-    for (var value in _baseSequence.split(''))
-      value: _baseSequence.indexOf(value),
+    for (var value in baseSequence.split(''))
+      value: baseSequence.indexOf(value),
   };
 
   /// Creates a reversed Map of available characters for a geohash
   final _base32MapR = <int, String>{
-    for (var value in _baseSequence.split(''))
-      _baseSequence.indexOf(value): value,
+    for (var value in baseSequence.split(''))
+      baseSequence.indexOf(value): value,
   };
 
   /// Converts a List<int> of bits into a double for Longitude and Latitude
@@ -248,7 +245,7 @@ class GeoHasher {
     }
 
     return parent +
-        _baseSequence[neighbor[direction]![t].toString().indexOf(last)];
+        baseSequence[neighbor[direction]![t].toString().indexOf(last)];
   }
 
   /// Returns a Map<String, String> containing the `Direction` as the key and

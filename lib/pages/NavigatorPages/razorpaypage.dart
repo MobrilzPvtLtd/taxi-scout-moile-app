@@ -3,16 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/walletpage.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
-import 'package:tagyourtaxi_driver/pages/noInternet/noInternet.dart';
+import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-// ignore: must_be_immutable
 class RazorPayPage extends StatefulWidget {
-  dynamic from;
-  RazorPayPage({this.from, Key? key}) : super(key: key);
+  const RazorPayPage({Key? key}) : super(key: key);
 
   @override
   State<RazorPayPage> createState() => _RazorPayPageState();
@@ -35,12 +33,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    dynamic val;
-    if (widget.from == '1') {
-      val = await payMoneyStripe(response.paymentId);
-    } else {
-      val = await addMoneyRazorpay(addMoney, response.paymentId);
-    }
+    var val = await addMoneyRazorpay(addMoney, response.paymentId);
     if (val == 'success') {
       setState(() {
         _success = true;
@@ -218,7 +211,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
                                             onTap: () async {
                                               setState(() {
                                                 _success = false;
-
+                                                // super.detachFromGLContext();
                                                 Navigator.pop(context, true);
                                               });
                                             },

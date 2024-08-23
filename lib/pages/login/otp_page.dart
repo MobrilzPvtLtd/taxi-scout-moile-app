@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tagyourtaxi_driver/pages/onTripPage/booking_confirmation.dart';
-import 'package:tagyourtaxi_driver/pages/onTripPage/invoice.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/login/get_started.dart';
 import 'package:tagyourtaxi_driver/pages/login/login.dart';
+import 'package:tagyourtaxi_driver/pages/login/ownerregister.dart';
 import 'package:tagyourtaxi_driver/pages/onTripPage/map_page.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/pages/vehicleInformations/docs_onprocess.dart';
+import 'package:tagyourtaxi_driver/pages/vehicleInformations/upload_docs.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import '../../styles/styles.dart';
 import '../../functions/functions.dart';
@@ -42,7 +43,7 @@ class _OtpState extends State<Otp> {
   void initState() {
     _loading = false;
     timers();
-    otpFalse();
+   otpFalse();
     super.initState();
   }
 
@@ -52,57 +53,51 @@ class _OtpState extends State<Otp> {
     super.dispose();
   }
 
-  //navigate
+//navigate
   navigate(verify) {
     if (verify == true) {
-      if (userRequestData.isNotEmpty && userRequestData['is_completed'] == 1) {
+      if (userDetails['uploaded_document'] == false) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => Docs()), (route) => false);
+      } else if (userDetails['uploaded_document'] == true &&
+          userDetails['approve'] == false) {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const Invoice()),
+            MaterialPageRoute(
+              builder: (context) => const DocsProcess(),
+            ),
             (route) => false);
-      } else if (userRequestData.isNotEmpty &&
-          userRequestData['is_completed'] != 1) {
-        Future.delayed(const Duration(seconds: 2), () {
-          if (userRequestData['is_rental'] == true) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BookingConfirmation(
-                          type: 1,
-                        )),
-                (route) => false);
-          } else {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => BookingConfirmation()),
-                (route) => false);
-          }
-        });
-      } else {
+      } else if (userDetails['uploaded_document'] == true &&
+          userDetails['approve'] == true) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const Maps()),
             (route) => false);
       }
     } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const GetStarted()));
+      if (ischeckownerordriver == 'driver') {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const GetStarted()));
+      } else if (ischeckownerordriver == 'owner') {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const OwnersRegister()));
+      }
     }
   }
 
-  //otp is false
+//otp is false
   otpFalse() async {
     if (phoneAuthCheck == false) {
       _loading = true;
-      otpController.text = '123456';
+      otpController.text ='123456';
+      // '123456';
       otpNumber = otpController.text;
       var verify = await verifyUser(phnumber);
-
       navigate(verify);
     }
   }
 
-  //auto verify otp
+//auto verify otp
 
   verifyOtp() async {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -111,6 +106,7 @@ class _OtpState extends State<Otp> {
       await FirebaseAuth.instance.signInWithCredential(credentials);
 
       var verify = await verifyUser(phnumber);
+      credentials = null;
       navigate(verify);
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-verification-code') {
@@ -158,14 +154,16 @@ class _OtpState extends State<Otp> {
                 children: [
                   Container(
                     padding: EdgeInsets.only(
-                        left: media.width * 0.08, right: media.width * 0.08),
+                        left: media.width * 0.08,
+                        right: media.width * 0.08,
+                        top: media.width * 0.05 +
+                            MediaQuery.of(context).padding.top),
                     color: page,
                     height: media.height * 1,
                     width: media.width * 1,
                     child: Column(
                       children: [
                         Container(
-                            height: media.height * 0.12,
                             width: media.width * 1,
                             color: topBar,
                             child: Row(
@@ -215,8 +213,6 @@ class _OtpState extends State<Otp> {
                                     letterSpacing: 1),
                               ),
                               SizedBox(height: media.height * 0.1),
-
-                              //otp text box
                               Container(
                                 height: media.width * 0.15,
                                 width: media.width * 0.9,
@@ -254,9 +250,10 @@ class _OtpState extends State<Otp> {
                                 ),
                               ),
 
-                              //otp error
+                              // show error on otp
                               (_error != '')
                                   ? Container(
+                                      width: media.width * 0.8,
                                       alignment: Alignment.center,
                                       margin: EdgeInsets.only(
                                           top: media.height * 0.02),
@@ -276,6 +273,7 @@ class _OtpState extends State<Otp> {
                                 child: Button(
                                   onTap: () async {
                                     if (otpNumber.length == 6) {
+                                      timer.cancel();
                                       setState(() {
                                         _loading = true;
                                         _error = '';
@@ -283,8 +281,9 @@ class _OtpState extends State<Otp> {
                                       //firebase code send false
                                       if (phoneAuthCheck == false) {
                                         var verify = await verifyUser(phnumber);
+                                        verifyOtp();
 
-                                        navigate(verify);
+                                       navigate(verify);
                                       } else {
                                         // firebase code send true
                                         try {
@@ -299,6 +298,7 @@ class _OtpState extends State<Otp> {
 
                                           var verify =
                                               await verifyUser(phnumber);
+                                            //   verifyOtp();
                                           navigate(verify);
                                         } on FirebaseAuthException catch (error) {
                                           if (error.code ==
@@ -309,13 +309,11 @@ class _OtpState extends State<Otp> {
                                               _error =
                                                   languages[choosenLanguage]
                                                       ['text_otp_error'];
+                                              _loading = false;
                                             });
                                           }
                                         }
                                       }
-                                      setState(() {
-                                        _loading = false;
-                                      });
                                     } else if (phoneAuthCheck == true &&
                                         resendTime == 0 &&
                                         otpNumber.length != 6) {
@@ -329,6 +327,10 @@ class _OtpState extends State<Otp> {
                                           phnumber);
                                     }
                                   },
+                                  borcolor:
+                                      (resendTime != 0 && otpNumber.length != 6)
+                                          ? underline
+                                          : null,
                                   text: (otpNumber.length == 6)
                                       ? languages[choosenLanguage]
                                           ['text_verify']
@@ -340,10 +342,6 @@ class _OtpState extends State<Otp> {
                                               ' ' +
                                               resendTime.toString(),
                                   color:
-                                      (resendTime != 0 && otpNumber.length != 6)
-                                          ? underline
-                                          : null,
-                                  borcolor:
                                       (resendTime != 0 && otpNumber.length != 6)
                                           ? underline
                                           : null,
@@ -360,11 +358,13 @@ class _OtpState extends State<Otp> {
                   (internet == false)
                       ? Positioned(
                           top: 0,
-                          child: NoInternet(onTap: () {
-                            setState(() {
-                              internetTrue();
-                            });
-                          }))
+                          child: NoInternet(
+                            onTap: () {
+                              setState(() {
+                                internetTrue();
+                              });
+                            },
+                          ))
                       : Container(),
 
                   //loader

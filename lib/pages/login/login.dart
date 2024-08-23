@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/login/otp_page.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
-import 'package:tagyourtaxi_driver/pages/signupPage/email_verify_screen.dart';
+import 'package:tagyourtaxi_driver/pages/vehicleInformations/service_area.dart';
 import '../../styles/styles.dart';
 import '../../functions/functions.dart';
-import '../../translations/translation.dart';
+import '../../translation/translation.dart';
 import '../../widgets/widgets.dart';
-import 'package:tagyourtaxi_driver/pages/onTripPage/map_page.dart';
-import '../signupPage/signup_screen.dart';
 import 'forgot_password.dart';
-import 'login_otp.dart';
+import 'login_email_verify_screen.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -58,16 +55,6 @@ class _LoginState extends State<Login> {
         _isLoading = false;
       });
     }
-  }
-
-  //navigate
-  navigate() {
-    // Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(builder: (context) =>  Maps()),
-    //       (route) => false);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const Otp()));
   }
 
   @override
@@ -167,14 +154,6 @@ class _LoginState extends State<Login> {
                         alignment: Alignment.center,
                         child: Button(
                           onTap: () async {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           LoginOtpScreen(
-                            //               email: _emailController
-                            //                   .text)),
-                            // );
                             if (_formKey.currentState!.validate()) {
                               setState(() {
                                 _errorMessage = null;
@@ -188,7 +167,7 @@ class _LoginState extends State<Login> {
                               }
 
                               if (_errorMessage == null) {
-                                var loginResult = await userLogin(
+                                var loginResult = await driverLogin(
                                   email: _emailController.text,
                                   password: _passwordController.text,
                                 );
@@ -198,7 +177,7 @@ class _LoginState extends State<Login> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            Login_otp(
+                                            LoginOtpScreen(
                                                 email: _emailController
                                                     .text)),
                                   );
@@ -237,7 +216,7 @@ class _LoginState extends State<Login> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const ForgotPassword()),
+                                MaterialPageRoute(builder: (context) =>  ForgotPassword()),
                               );
                             },
                             child: Text(
@@ -294,7 +273,7 @@ class _LoginState extends State<Login> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                    const SignupScreen()),
+                                    const ServiceArea()),
                               );
                             },
                             child: Text(

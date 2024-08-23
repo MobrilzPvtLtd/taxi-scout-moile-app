@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
 // ignore: must_be_immutable
 class NoInternet extends StatefulWidget {
+  // const NoInternet({ Key? key }) : super(key: key);
   dynamic onTap;
   // ignore: use_key_in_widget_constructors
   NoInternet({required this.onTap});
@@ -26,7 +27,6 @@ class _NoInternetState extends State<NoInternet> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          //no internet popup
           Container(
             padding: EdgeInsets.all(media.width * 0.05),
             width: media.width * 0.8,

@@ -16,7 +16,7 @@ class _LoadingState extends State<Loading> {
 
   @override
   void initState() {
-    //loader animation
+    // loader
     Timer.periodic(const Duration(milliseconds: 250), (timer) {
       if (mounted) {
         setState(() {
@@ -58,16 +58,16 @@ class _LoadingState extends State<Loading> {
                   duration: const Duration(milliseconds: 225),
                   height: _size1,
                   width: _size1,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: inputfocusedUnderline),
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: buttonColor),
                 ),
                 const SizedBox(width: 5),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 225),
                   height: _size2,
                   width: _size2,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: inputfocusedUnderline),
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: buttonColor),
                 ),
                 const SizedBox(
                   width: 5,
@@ -76,8 +76,8 @@ class _LoadingState extends State<Loading> {
                   duration: const Duration(milliseconds: 225),
                   height: _size3,
                   width: _size3,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: inputfocusedUnderline),
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: buttonColor),
                 )
               ],
             ),

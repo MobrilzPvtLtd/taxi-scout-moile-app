@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
-import 'package:http/http.dart' as http;
 
 // create an instance
 FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -40,7 +41,7 @@ var generalNotificationDetails =
     NotificationDetails(android: androidDetails, iOS: iosDetails);
 
 var androiInit =
-    const AndroidInitializationSettings('@drawable/logo'); //for logo
+    const AndroidInitializationSettings('@mipmap/ic_launcher'); //for logo
 var iosInit = const DarwinInitializationSettings(
   defaultPresentAlert: true,
   defaultPresentBadge: true,
@@ -72,7 +73,12 @@ Future<void> initMessaging() async {
           _showGeneralNotification(message.data);
         }
       } else {
+        // printWrapped('yresesrse');
+        // if(message.data['image'].isNotEmpty){
+        //   _showBigPictureNotificationURL(message.data);
+        // }else{
         _showRideNotification(message.notification);
+        // }
       }
     }
   });

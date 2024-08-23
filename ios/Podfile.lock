@@ -1,6 +1,9 @@
 PODS:
-  - audioplayers_darwin (0.0.1):
+  - audioplayers (0.0.1):
     - Flutter
+  - awesome_notifications (0.0.5):
+    - Flutter
+    - IosAwnCore (= 0.7.3)
   - cashfree_pg (0.0.1):
     - Flutter
   - connectivity_plus (0.0.1):
@@ -115,6 +118,7 @@ PODS:
   - GTMSessionFetcher/Core (2.1.0)
   - image_picker_ios (0.0.1):
     - Flutter
+  - IosAwnCore (0.7.3)
   - leveldb-library (1.22.1)
   - location (0.0.1):
     - Flutter
@@ -170,7 +174,8 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
+  - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
   - cashfree_pg (from `.symlinks/plugins/cashfree_pg/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - contacts_service (from `.symlinks/plugins/contacts_service/ios`)
@@ -210,6 +215,7 @@ SPEC REPOS:
     - GoogleMaps
     - GoogleUtilities
     - GTMSessionFetcher
+    - IosAwnCore
     - leveldb-library
     - nanopb
     - OrderedSet
@@ -224,8 +230,10 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
-  audioplayers_darwin:
-    :path: ".symlinks/plugins/audioplayers_darwin/ios"
+  audioplayers:
+    :path: ".symlinks/plugins/audioplayers/ios"
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
   cashfree_pg:
     :path: ".symlinks/plugins/cashfree_pg/ios"
   connectivity_plus:
@@ -276,7 +284,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
+  audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
+  awesome_notifications: d63d9a25f126860f9a600850d99772237895b3ba
   cashfree_pg: 36bb2a5b4cc228a7697f55c55300b4a8b42fff00
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   contacts_service: 849e1f84281804c8bfbec1b4c3eedcb23c5d3eca
@@ -303,8 +312,9 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   GTMSessionFetcher: ffbb25ec00ebcb5201adab0a56d808f6f1902d9f
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  IosAwnCore: 6494e0e174d49f04f513e8a002187be226889a37
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
-  location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
+  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
@@ -326,6 +336,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
   webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
-PODFILE CHECKSUM: 2442b2c4f87c908ad696a9b4badcddda14e350fb
+PODFILE CHECKSUM: bc18b5fc0ae5f3576fa36e7ab817641b200b9dc9
 
 COCOAPODS: 1.15.2

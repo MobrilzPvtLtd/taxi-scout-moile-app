@@ -1,0 +1,69 @@
+{
+    "id": "1",
+    "package_name": "Taxi",
+    "description": "asas",
+    "short_description": "casd",
+    "typesWithPrice": {
+      "data": [
+        {
+          "zone_type_id": "927c0e20-502e-4157-861f-3951016c6894",
+          "type_id": "9211bc4f-79b3-4774-8453-4230f1cb3887",
+          "name": "Swift Dzire",
+          "capacity": 4,
+          "currency": "£",
+          "unit": "1",
+          "unit_in_words": "Km",
+          "distance_price_per_km": "5",
+          "time_price_per_min": "100",
+          "free_distance": "5",
+          "free_min": "10",
+          "fare_amount": "100",
+          "description": "Taxi",
+          "short_description": "Taxi",
+          "supported_vehicles": "Taxi",
+          "icon": "http://taxiride.appnexustech.in//storage/uploads/types/images/WHKMqL1kGwoaPX5wUXznKbShArWDxOuXxTarR0pA.jpg",
+          "driver_arival_estimation": "--",
+          "is_default": "true",
+          "payment_type": "cash,wallet",
+          "discounted_totel": "0",
+          "has_discount": "false",
+          "promocode_id": "null"
+        }
+      ]
+    }
+  },
+  {
+    "id": "2",
+    "package_name": "Rental",
+    "description": "A short trip to register",
+    "short_description": "A short trip",
+    "typesWithPrice": {
+      "data": [
+        {
+          "zone_type_id": "7b8cb8ec-af8a-401b-9f6f-b0e36dcd5ed8",
+          "type_id": "8a4cfda8-4fcc-4d08-aeb1-6221a915c2b7",
+          "name": "WagonR",
+          "capacity": "4",
+          "currency": "£",
+          "unit": "1",
+          "unit_in_words": "Km",
+          "distance_price_per_km": "40",
+          "time_price_per_min": "40",
+          "free_distance": "40",
+          "free_min": "40",
+          "fare_amount": "40",
+          "description": "WagonR",
+          "short_description": "WagonR",
+          "supported_vehicles": "WagonR",
+          "icon": "http://taxiride.appnexustech.in//storage/uploads/types/images/qChn3QP5eCbISjlXGsSeZy69SLPNcr4oabSyskUV.jpg",
+          "driver_arival_estimation": "--",
+          "is_default": false,
+          "payment_type": "cash,wallet",
+          "discounted_totel": "0",
+          "has_discount": false,
+          "promocode_id": "null"
+        }
+      ]
+    }
+  }
+  

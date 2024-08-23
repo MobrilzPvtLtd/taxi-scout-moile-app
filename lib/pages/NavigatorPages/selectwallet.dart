@@ -6,13 +6,11 @@ import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
-// ignore: must_be_immutable
 class SelectWallet extends StatefulWidget {
-  dynamic from;
-  SelectWallet({this.from, Key? key}) : super(key: key);
+  const SelectWallet({Key? key}) : super(key: key);
 
   @override
   State<SelectWallet> createState() => _SelectWalletState();
@@ -44,7 +42,7 @@ class _SelectWalletState extends State<SelectWallet> {
       },
       child: Material(
         child: ValueListenableBuilder(
-            valueListenable: valueNotifierBook.value,
+            valueListenable: valueNotifierHome.value,
             builder: (context, value, child) {
               return Directionality(
                 textDirection: (languageDirection == 'rtl')
@@ -78,7 +76,7 @@ class _SelectWalletState extends State<SelectWallet> {
                               Positioned(
                                   child: InkWell(
                                       onTap: () {
-                                        Navigator.pop(context);
+                                        Navigator.pop(context, true);
                                       },
                                       child: const Icon(Icons.arrow_back)))
                             ],
@@ -92,7 +90,6 @@ class _SelectWalletState extends State<SelectWallet> {
                               children: [
                                 //card design
                                 CardField(
-                                  controller: cardController,
                                   onCardChanged: (card) {
                                     setState(() {});
                                   },
@@ -101,7 +98,7 @@ class _SelectWalletState extends State<SelectWallet> {
                                   height: media.width * 0.1,
                                 ),
 
-                                //pay money button
+                                //pay amount button
                                 Button(
                                     width: media.width * 0.5,
                                     onTap: () async {
@@ -136,14 +133,8 @@ class _SelectWalletState extends State<SelectWallet> {
                                         }
                                         if (val2.status ==
                                             PaymentIntentsStatus.Succeeded) {
-                                          dynamic val3;
-                                          if (widget.from == '1') {
-                                            val3 =
-                                                await payMoneyStripe(val2.id);
-                                          } else {
-                                            val3 = await addMoneyStripe(
-                                                addMoney, val2.id);
-                                          }
+                                          var val3 = await addMoneyStripe(
+                                              addMoney, val2.id);
                                           if (val3 == 'success') {
                                             setState(() {
                                               _success = true;
@@ -167,15 +158,15 @@ class _SelectWalletState extends State<SelectWallet> {
                                         _isLoading = false;
                                       });
                                     },
-                                    text: 'Pay')
+                                    text: languages[choosenLanguage]
+                                        ['text_pay'])
                               ],
                             ),
                           )
                         ],
                       ),
                     ),
-
-                    //failure error
+                    //payment failed
                     (_failed == true)
                         ? Positioned(
                             top: 0,
@@ -222,7 +213,7 @@ class _SelectWalletState extends State<SelectWallet> {
                             ))
                         : Container(),
 
-                    //success popup
+                    //payment success
                     (_success == true)
                         ? Positioned(
                             top: 0,
@@ -257,6 +248,7 @@ class _SelectWalletState extends State<SelectWallet> {
                                             onTap: () async {
                                               setState(() {
                                                 _success = false;
+                                                // super.detachFromGLContext();
                                                 Navigator.pop(context, true);
                                               });
                                             },

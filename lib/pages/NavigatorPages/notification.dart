@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -26,9 +26,7 @@ class _NotificationPageState extends State<NotificationPage> {
   getdata() async {
     await getnotificationHistory();
     if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
+      isLoading = false;
     }
   }
 
@@ -520,7 +518,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                       )
                                     ],
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ))

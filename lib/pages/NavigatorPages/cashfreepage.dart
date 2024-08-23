@@ -5,16 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/NavigatorPages/walletpage.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
-import 'package:tagyourtaxi_driver/pages/noInternet/noInternet.dart';
+import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 import 'package:cashfree_pg/cashfree_pg.dart';
 
-// ignore: must_be_immutable
 class CashFreePage extends StatefulWidget {
-  dynamic from;
-  CashFreePage({this.from, Key? key}) : super(key: key);
+  const CashFreePage({Key? key}) : super(key: key);
 
   @override
   State<CashFreePage> createState() => _CashFreePageState();
@@ -31,7 +29,7 @@ class _CashFreePageState extends State<CashFreePage> {
     super.initState();
   }
 
-//payment code
+//payment gateway code
   payMoney() async {
     var getToken =
         await getCfToken(addMoney.toString(), walletBalance['currency_code']);
@@ -54,12 +52,7 @@ class _CashFreePageState extends State<CashFreePage> {
       }).then((value) async {
         cfSuccessList = jsonDecode(jsonEncode(value));
         if (cfSuccessList['txStatus'] == 'SUCCESS') {
-          dynamic verify;
-          if (widget.from == '1') {
-            verify = await payMoneyStripe(cfSuccessList['orderId']);
-          } else {
-            verify = await cashFreePaymentSuccess();
-          }
+          var verify = await cashFreePaymentSuccess();
           if (verify == 'success') {
             setState(() {
               _success = true;
@@ -226,7 +219,7 @@ class _CashFreePageState extends State<CashFreePage> {
                                             onTap: () async {
                                               setState(() {
                                                 _success = false;
-                                                // super.detachFromGLContext();
+
                                                 Navigator.pop(context, true);
                                               });
                                             },

@@ -4,13 +4,12 @@ import 'package:tagyourtaxi_driver/functions/functions.dart';
 import 'package:tagyourtaxi_driver/pages/loadingPage/loading.dart';
 import 'package:tagyourtaxi_driver/pages/noInternet/nointernet.dart';
 import 'package:tagyourtaxi_driver/styles/styles.dart';
-import 'package:tagyourtaxi_driver/translations/translation.dart';
+import 'package:tagyourtaxi_driver/translation/translation.dart';
 import 'package:tagyourtaxi_driver/widgets/widgets.dart';
 
-// ignore: must_be_immutable
 class MakeComplaint extends StatefulWidget {
-  int fromPage;
-  // ignore: use_key_in_widget_constructors
+  final int fromPage;
+  // ignore: prefer_const_constructors_in_immutables, use_key_in_widget_constructors
   MakeComplaint({required this.fromPage});
 
   @override
@@ -32,6 +31,7 @@ class _MakeComplaintState extends State<MakeComplaint> {
     super.initState();
   }
 
+//get complaint data
   getData() async {
     if (mounted) {
       setState(() {
@@ -214,7 +214,8 @@ class _MakeComplaintState extends State<MakeComplaint> {
                 ),
               ),
 
-              //choose complaint option
+              //complaint options
+
               (_showOptions == true)
                   ? Positioned(
                       top: media.width * 0.35 +
@@ -271,6 +272,8 @@ class _MakeComplaintState extends State<MakeComplaint> {
                         ),
                       ))
                   : Container(),
+
+              //success
               (_success == true)
                   ? Positioned(
                       child: Container(
