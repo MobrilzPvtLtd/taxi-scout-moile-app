@@ -603,12 +603,13 @@ Future<String> registerDriver({
       "login_by": (platform == TargetPlatform.android) ? 'android' : 'ios',
       "vehicle_type": myVehicleId ?? "",
       "vehicle_types": '["${myVehicleId}"]',  // Make sure this is the correct format
-      "car_color": vehicleColor ?? "Red",
-      "car_number": vehicleNumber ?? "1234",
-      "vehicle_year": modelYear ?? "Frari",
+      // "car_color": vehicleColor ?? "Red",
+      // "car_number": vehicleNumber ?? "1234",
+      // "vehicle_year": modelYear ?? "Frari",
       'lang': choosenLanguage ?? "",
-      'transport_type': transportType ?? "Taxi",
-      'gender':'female',
+      // 'transport_type': transportType ?? "Taxi",
+      'driving_license':driverLicence ??"",
+      'gender':'',
       'owner_id':companyId ?? ""
     });
 

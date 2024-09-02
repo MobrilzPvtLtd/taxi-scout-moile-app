@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -148,11 +149,12 @@ class _LoadingPageState extends State<LoadingPage> {
 
     return Material(
       child: Scaffold(
+        backgroundColor: Color(0xff68706f),
         body: Stack(
           children: [
             Container(
-              height: media.height * 1,
-              width: media.width * 1,
+              // height: media.height * 1,
+              // width: media.width * 1,
 
               // decoration: BoxDecoration(
               //        color: yellowcolor.withOpacity(0.9)
@@ -162,13 +164,19 @@ class _LoadingPageState extends State<LoadingPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Image.asset(
+                  //   'assets/images/logomain.png',
+                  //   fit: BoxFit.fill,
+                  //   height:MediaQuery.of(context).size.height,
+                  //   width: MediaQuery.of(context).size.width,
+                  // ),
                   Container(
-                    padding: EdgeInsets.all(media.width * 0.01),
-                    width: media.width * 0.700,
-                    height: media.width * 0.700,
+                    // padding: EdgeInsets.all(media.width * 0.01),
+                    width: media.width * 2 ,
+                    height: media.width * 2,
                     decoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('assets/images/taxi.png'),
+                            image: AssetImage('assets/images/splashNew.png'),
                             fit: BoxFit.contain)),
                   ),
                 ],

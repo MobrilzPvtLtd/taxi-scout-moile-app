@@ -63,6 +63,7 @@ dependencies:
   flutter_inappwebview: ^5.5.0+1
   visibility_detector: ^0.2.0
   uuid: ^3.0.6
+  flutter_svg: ^2.0.1
   hexcolor:
   awesome_notifications: ^0.7.3
   flutter_launcher_icons:
@@ -87,7 +88,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:
   android: true
-  image_path: "assets/images/applogo.png"
+  image_path: "assets/images/logomain.png"
 # The following section is specific to Flutter.
 flutter:
 

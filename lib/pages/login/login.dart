@@ -177,7 +177,7 @@ class _LoginState extends State<Login> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            LoginOtpScreen(
+                                            Login_otp(
                                                 email: _emailController
                                                     .text)),
                                   );
